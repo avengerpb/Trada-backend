@@ -10,7 +10,6 @@
 
             form_input('email', $this->input->post('email'));
             form_input('user_name', $this->input->post('user_name'));
-            form_input('full_name', $this->input->post('full_name'));
             form_password('password');
             form_password('cpassword');
             form_submit('signup_submit', 'Sign Up');
@@ -28,11 +27,9 @@
                 <br>
                 <input id="inputUserName" class="form-control" placeholder="User Name" required autofocus name='user_name'>
                 <br>
-                <input id="inputFullName" class="form-control" placeholder="Full Name" required autofocus name='full_name'>
-                <br>
                 <input type="password" id="inputPassword" class="form-control" placeholder="Password" required name='password'>
                 <br>
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required name='cpassword'>
+                <input type="password" id="inputPassword" class="form-control" placeholder="Confirm Password" required name='cpassword'>
                 <br>
 
                 <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit" name='signup_submit'>Sign up</button>

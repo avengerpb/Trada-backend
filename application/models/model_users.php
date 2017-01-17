@@ -31,6 +31,7 @@ class Model_users extends CI_Model {
 		$data = array (
 			'email' => $this->input->post('email'),
 			'password' => md5($this->input->post('password')),
+			'user_name' => $this->input->post('user_name'),
 			'keyid' => $key
 
 		);

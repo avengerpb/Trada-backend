@@ -47,11 +47,12 @@ class user extends CI_Controller {
 		$this->load->library('form_validation');
 
 		$this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]');
-		$this->form_validation->set_rules('user_name', 'User_name', 'required|trim|is_unique[user.user_name]');
+		$this->form_validation->set_rules('user_name', 'User Name', 'required|trim|is_unique[user.user_name]');
 		$this->form_validation->set_rules('password', 'Password', 'required|trim');
 		$this->form_validation->set_rules('cpassword', 'Comfirm Password', 'required|trim|matches[password]');
 
 		$this->form_validation->set_message('is_unique', 'The Email/UserName you entered already existed');
+		
 
 		if($this->form_validation->run() ){
 			$key = md5(uniqid());
