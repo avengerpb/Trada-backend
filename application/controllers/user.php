@@ -192,4 +192,9 @@ class user extends CI_Controller {
 			$this->load->view('reset_pw');
 		}
 	}
+
+	public function logout(){
+		$this->session->sess_destroy();
+		redirect('user/login');
+	}
 }
