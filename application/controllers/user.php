@@ -27,13 +27,13 @@ class user extends CI_Controller {
 	public function login_validation() {
 		$this->load->library('form_validation');
 
-		$this->form_validation->set_rules('email', 'Email', 'required|trim|callback_validate_credentials');
+		$this->form_validation->set_rules('email/user_name', 'Email/Username', 'required|trim|callback_validate_credentials');
 		$this->form_validation->set_rules('password', 'Password', 'required|md5|trim');
 
 		if($this->form_validation->run()) {
-			$email = $this->input->post('email');
+			$email = $this->input->post('email/user_name');
 			$data = array (
-				'email' => $this->input->post('email'),
+				'email/user_name' => $this->input->post('email/user_name'),
 				'is_logged_in' => 1
 			);
 			$this->session->set_userdata($data);
@@ -104,7 +104,7 @@ class user extends CI_Controller {
 		if ($this->model_users->can_log_in()){
 			return true;
 		} else {
-			$this->form_validation->set_message('validate_credentials', 'Incorrect email/password.');
+			$this->form_validation->set_message('validate_credentials', 'Incorrect email/username/password.');
 			return false;
 		}
 	}
