@@ -96,4 +96,23 @@ class Model_users extends CI_Model {
 			return true;
 		} else return false;
 	}
+
+	public function get_profile($user_name){
+		$this->db->where('email', $user_name);
+		$query = $this->db->get('user');
+		if ($query->num_rows() > 0){
+			$res   = $query->result();        
+    		return $res;
+		} else {
+			$this->db->where('user_name', $user_name);
+			$query = $this->db->get('user');
+			if ($query->num_rows() > 0){
+				$res   = $query->result();        
+    			return $res;
+			} else {
+				return NULL;
+			}
+		}
+	}
+	
 }

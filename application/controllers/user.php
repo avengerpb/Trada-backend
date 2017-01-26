@@ -197,4 +197,37 @@ class user extends CI_Controller {
 		$this->session->sess_destroy();
 		redirect('user/login');
 	}
+
+	public function profile($user_name){
+		$this->load->model('model_users');
+   		$res = $this->model_users->get_profile($user_name);
+   		if($res){
+        	$data['result'] = $res;
+        	$this->load->view('profile', $data);
+   		} else {
+        	echo "Fail";
+    	}
+	}
+
+	public function edit_profile(){
+		$this->load->view('edit_profile');
+	}
+
+	public function edit_profile_form()
+	{
+		$this->load->model('model_users');
+		$user_name = $this->input->post('user_name');
+		$data = array(
+			'full_name' => $this->input->post('full_name'),
+			'dob' => $this->input->post('dob'),
+			'password' => md5($this->input->post('password')),
+			'user_image_url'=> $this->input->post('user_image_url'),
+			'fb_link' => $this->input->post('fb_link')
+			);
+		$data = array_filter($data);
+		if ($this->model_users->edit_profile_data($username, $data)){
+			echo "Success";
+			redirect(base_url().'user/profile?user_name='.$user_name);
+		} else echo "failed";
+	}
 }
