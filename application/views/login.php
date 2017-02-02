@@ -8,7 +8,7 @@
 
     echo form_open('user/login_validation');
 
-    form_input('email');
+    form_input('email/user_name');
     form_password('password');
     form_submit('login_submit', 'Login');
 
@@ -29,7 +29,7 @@
                 <?php
                 echo validation_errors();
                 ?>
-                <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus name='email'>
+                <input placeholder="Email or Username" required autofocus name='email/user_name'>
                 <br>
                 <input type="password" id="inputPassword" class="form-control" placeholder="Password" required name='password'>
                 <br>

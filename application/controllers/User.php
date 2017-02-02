@@ -27,13 +27,13 @@ class user extends CI_Controller {
 	public function login_validation() {
 		$this->load->library('form_validation');
 
-		$this->form_validation->set_rules('email', 'Email', 'required|trim|callback_validate_credentials');
+		$this->form_validation->set_rules('email/user_name', 'Email/Username', 'required|trim|callback_validate_credentials');
 		$this->form_validation->set_rules('password', 'Password', 'required|md5|trim');
 
 		if($this->form_validation->run()) {
-			$email = $this->input->post('email');
+			$email = $this->input->post('email/user_name');
 			$data = array (
-				'email' => $this->input->post('email'),
+				'email/user_name' => $this->input->post('email/user_name'),
 				'is_logged_in' => 1
 			);
 			$this->session->set_userdata($data);
@@ -104,7 +104,7 @@ class user extends CI_Controller {
 		if ($this->model_users->can_log_in()){
 			return true;
 		} else {
-			$this->form_validation->set_message('validate_credentials', 'Incorrect email/password.');
+			$this->form_validation->set_message('validate_credentials', 'Incorrect email/username/password.');
 			return false;
 		}
 	}
@@ -196,5 +196,38 @@ class user extends CI_Controller {
 	public function logout(){
 		$this->session->sess_destroy();
 		redirect('user/login');
+	}
+
+	public function profile($user_name){
+		$this->load->model('model_users');
+   		$res = $this->model_users->get_profile($user_name);
+   		if($res){
+        	$data['result'] = $res;
+        	$this->load->view('profile', $data);
+   		} else {
+        	echo "Fail";
+    	}
+	}
+
+	public function edit_profile(){
+		$this->load->view('edit_profile');
+	}
+
+	public function edit_profile_form()
+	{
+		$this->load->model('model_users');
+		$user_name = $this->input->post('user_name');
+		$data = array(
+			'full_name' => $this->input->post('full_name'),
+			'dob' => $this->input->post('dob'),
+			'password' => md5($this->input->post('password')),
+			'user_image_url'=> $this->input->post('user_image_url'),
+			'fb_link' => $this->input->post('fb_link')
+			);
+		$data = array_filter($data);
+		if ($this->model_users->edit_profile_data($username, $data)){
+			echo "Success";
+			redirect(base_url().'user/profile?user_name='.$user_name);
+		} else echo "failed";
 	}
 }
