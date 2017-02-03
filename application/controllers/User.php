@@ -3,6 +3,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class user extends CI_Controller {
 
+	public function __construct() {
+		
+		parent::__construct();
+		$this->load->library(array('session'));
+		$this->load->helper(array('url'));
+		$this->load->model('model_users');
+		
+	}
+
 	public function index(){
 		// $this->load->view('index');
 	}
@@ -26,18 +35,22 @@ class user extends CI_Controller {
 
 	public function login_validation() {
 		$this->load->library('form_validation');
+		$this->load->helper('form');
+
+
 
 		$this->form_validation->set_rules('email/user_name', 'Email/Username', 'required|trim|callback_validate_credentials');
 		$this->form_validation->set_rules('password', 'Password', 'required|md5|trim');
 
 		if($this->form_validation->run()) {
-			$email = $this->input->post('email/user_name');
+
 			$data = array (
 				'email/user_name' => $this->input->post('email/user_name'),
 				'is_logged_in' => 1
 			);
+
 			$this->session->set_userdata($data);
-			redirect('user/index');
+			redirect('user/index/'.$this->input->post('email/user_name'));
 		} else {
 			$this->load->view('login');
 		}
@@ -198,11 +211,16 @@ class user extends CI_Controller {
 		redirect('user/login');
 	}
 
-	public function profile($user_name){
+	public function profile(){
 		$this->load->model('model_users');
+		$user_name = $this->session->userdata('email/user_name');
    		$res = $this->model_users->get_profile($user_name);
    		if($res){
-        	$data['result'] = $res;
+        	$data['user_name'] = $res->user_name;
+        	$data['full_name'] = $res->full_name;
+        	$data['fb_link']   = $res->fb_link;
+        	$data['email'] = $res->email;
+        	$data['dob'] = $res->dob;
         	$this->load->view('profile', $data);
    		} else {
         	echo "Fail";
@@ -217,6 +235,7 @@ class user extends CI_Controller {
 	{
 		$this->load->model('model_users');
 		$user_name = $this->input->post('user_name');
+		$user_name = $this->session->userdata('email/user_name');
 		$data = array(
 			'full_name' => $this->input->post('full_name'),
 			'dob' => $this->input->post('dob'),
@@ -225,7 +244,7 @@ class user extends CI_Controller {
 			'fb_link' => $this->input->post('fb_link')
 			);
 		$data = array_filter($data);
-		if ($this->model_users->edit_profile_data($username, $data)){
+		if ($this->model_users->edit_profile_data($user_name, $data)){
 			echo "Success";
 			redirect(base_url().'user/profile?user_name='.$user_name);
 		} else echo "failed";
