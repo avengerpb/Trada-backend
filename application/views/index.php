@@ -5,4 +5,4 @@
 <?php
 	
 ?>
-<a class="navbar-brand" href="<?php echo base_url().'user/profile/'; ?>">profile</a>
+<a class="navbar-brand" href="<?php echo base_url().'user/profile/'.$user_name; ?>">profile</a>
