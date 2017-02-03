@@ -97,22 +97,44 @@ class Model_users extends CI_Model {
 		} else return false;
 	}
 
-	public function get_profile($user_name){
+	public function check_email_or_username($user_name){
 		$this->db->where('email', $user_name);
 		$query = $this->db->get('user');
 		if ($query->num_rows() > 0){
-			$res   = $query->result();        
-    		return $res;
+			return 'email';
 		} else {
 			$this->db->where('user_name', $user_name);
 			$query = $this->db->get('user');
-			if ($query->num_rows() > 0){
-				$res   = $query->result();        
-    			return $res;
+			if ($query->num_rows() > 0){       
+    			return 'user_name';
 			} else {
 				return NULL;
 			}
 		}
 	}
-	
+
+	public function get_profile($user_name){
+		$type = $this->model_users->check_email_or_username($user_name);
+		$this->db->where($type, $user_name);
+		$query = $this->db->get('user');
+		if ($query->num_rows() > 0){
+			$res   = $query->row();        
+    		return $res;
+		} else {
+				return NULL;
+		}
+	}
+
+	public function edit_profile_data($user_name, $data){
+		$type = $this->model_users->check_email_or_username($user_name);
+		$this->db->where($type, $user_name);
+		$query = $this->db->get('user');
+		if ($query->num_rows() > 0){
+			$query1 = $this->db->update('user', $data);      
+    		if ($query1){
+    			return true;
+    		} else return false;
+		} 
+	}
+
 }
