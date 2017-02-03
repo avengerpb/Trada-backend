@@ -9,7 +9,7 @@ function __construct() {
 function test()
 {
     $data = '';
-    $this->public_bootstrap($data);
+    $this->public_jqm($data);
 }
 
 function public_bootstrap($data)
