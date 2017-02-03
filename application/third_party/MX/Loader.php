@@ -279,6 +279,12 @@ class MX_Loader extends CI_Loader
 		return $this;
 	}
 
+	/** _ci_object_to_array function **/
+	protected function _ci_object_to_array($object) 
+	{
+	    return is_object($object) ? get_object_vars($object) : $object;
+	}
+
 	/** Load an array of plugins **/
 	public function plugins($plugins)
 	{
