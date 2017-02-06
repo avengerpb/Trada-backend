@@ -1,19 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-/**
- * User class.
- * 
- * @extends CI_Controller
- */
-class User extends CI_Controller {
+class user extends CI_Controller {
 
-	/**
-	 * __construct function.
-	 * 
-	 * @access public
-	 * @return void
-	 */
 	public function __construct() {
 		
 		parent::__construct();
@@ -22,12 +11,20 @@ class User extends CI_Controller {
 		$this->load->model('model_users');
 		
 	}
-	
-	
-	public function index() {
+
+	public function index(){
 		$data['user_name'] = $this->session->userdata('email/user_name');
 		$data['is_logged_in'] = $this->session->userdata('is_logged_in');
-		$this->load->view('index', $data);		
+		$this->load->view('index', $data);
+	}
+
+	public function login()
+	{
+		$this->load->view('login');
+	}
+
+	public function signup(){
+		$this->load->view('signup');
 	}
 
 	public function reset_pw(){
@@ -37,26 +34,33 @@ class User extends CI_Controller {
 	public function restricted(){
 		$this->load->view('restricted');
 	}
-	
-	/**
-	 * signup function.
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function signup() {
-		if ($this->session->userdata('admin') == 1){
-		redirect("/");
-		}
-		else {
-		// create the data object
-		$data = new stdClass();
-		
-		// load form helper and validation library
-		$this->load->helper('form');
+
+	public function login_validation() {
 		$this->load->library('form_validation');
-		
-		// set validation rules
+		$this->load->helper('form');
+
+
+
+		$this->form_validation->set_rules('email/user_name', 'Email/Username', 'required|trim|callback_validate_credentials');
+		$this->form_validation->set_rules('password', 'Password', 'required|md5|trim');
+
+		if($this->form_validation->run()) {
+
+			$data = array (
+				'email/user_name' => $this->input->post('email/user_name'),
+				'is_logged_in' => 1
+			);
+
+			$this->session->set_userdata($data);
+			redirect('user/index/'.$this->input->post('email/user_name'));
+		} else {
+			$this->load->view('login');
+		}
+	}
+
+	public function signup_validation(){
+		$this->load->library('form_validation');
+
 		$this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]');
 		$this->form_validation->set_rules('user_name', 'User Name', 'required|trim|is_unique[user.user_name]');
 		$this->form_validation->set_rules('password', 'Password', 'required|trim');
@@ -64,12 +68,8 @@ class User extends CI_Controller {
 
 		$this->form_validation->set_message('is_unique', 'The Email/UserName you entered already existed');
 		
-		if ($this->form_validation->run() === false) {
-			
-			// validation not ok, send validation errors to the view
-			$this->load->view('signup');
-		} else {
-			
+
+		if($this->form_validation->run() ){
 			$key = md5(uniqid());
 
 			$config['useragent']    = 'CodeIgniter';
@@ -107,13 +107,13 @@ class User extends CI_Controller {
 					redirect('user/attention');;
 				} else echo "The email cant be sent";
 			} else echo "problem adding to database.";
-			
-		}
-		
-	}
-}	
 
-public function validate_credentials(){
+		} else {
+			$this->load->view('signup');
+		}
+	}
+
+	public function validate_credentials(){
 		$this->load->model('model_users');
 
 		if ($this->model_users->can_log_in()){
@@ -139,8 +139,7 @@ public function validate_credentials(){
 		$this->load->view('attention');
 	}
 
-
-public function register_user($key){
+	public function register_user($key){
 		$this->load->model('model_users');
 
 		if ($this->model_users->is_key_valid($key)){
@@ -156,7 +155,7 @@ public function register_user($key){
 		} else echo "invalid key";
 	}
 
-public function reset_password_validation(){
+	public function reset_password_validation(){
 		$this->load->library('form_validation');
 
 		$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|callback_validate_email');
@@ -209,69 +208,12 @@ public function reset_password_validation(){
 		}
 	}
 
-
-
-
-	/**
-	 * login function.
-	 * 
-	 * @access public
-	 * @return void
-	 */
-
-	public function login() {
-		// if ($_SESSION['logged_in'] === FALSE) {
-		// create the data object
-		$data = new stdClass();
-		
-		// load form helper and validation library
-		$this->load->helper('form');
-		$this->load->library('form_validation');
-		
-		// set validation rules
-		$this->form_validation->set_rules('email/user_name', 'Email/Username', 'required|trim|callback_validate_credentials');
-		$this->form_validation->set_rules('password', 'Password', 'required|md5|trim');
-
-		if ($this->form_validation->run() == false) {
-			
-			// validation not ok, send validation errors to the view
-			$this->load->view('login');
-			
-		} else {
-			
-			// set variables from the form
-			
-			$data = array (
-				'email/user_name' => $this->input->post('email/user_name'),
-				'is_logged_in' => 1
-			);
-
-			$this->session->set_userdata($data);
-			redirect('user/index/'.$this->input->post('email/user_name'));
-				// user login ok
-    			}
-				
-		}
-		
-	// else {
-	// 	redirect('/');
-	// 	}
-	// }
-	
-	/**
-	 * logout function.
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function logout() {
-		
+	public function logout(){
 		$this->session->sess_destroy();
 		redirect('user/login');
-		
 	}
-	
-public function profile($user_name){
+
+	public function profile($user_name){
 		$this->load->model('model_users');
    		$res = $this->model_users->get_profile($user_name);
    		if($res){
@@ -288,7 +230,7 @@ public function profile($user_name){
     	}
 	}
 
-public function edit_profile($user_name){
+	public function edit_profile($user_name){
 		if ($user_name != $this->session->userdata('email/user_name')){
 			echo 'you did not logged in as this user!';
 		} else {
@@ -314,4 +256,3 @@ public function edit_profile($user_name){
 		} else echo "failed";
 	}
 }
-

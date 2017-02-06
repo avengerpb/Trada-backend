@@ -6,7 +6,7 @@
 <body>
     <?php
 
-    echo form_open('user/login_validation');
+    echo form_open('user/login');
 
     form_input('email/user_name');
     form_password('password');
@@ -26,9 +26,6 @@
               } else {
             ?>
                 <span id="reauth-email" class="reauth-email"></span>
-                <?php
-                echo validation_errors();
-                ?>
                 <input placeholder="Email or Username" required autofocus name='email/user_name'>
                 <br>
                 <input type="password" id="inputPassword" class="form-control" placeholder="Password" required name='password'>
