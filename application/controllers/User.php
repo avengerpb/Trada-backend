@@ -25,7 +25,7 @@ class User extends CI_Controller {
 	
 	
 	public function index() {
-		$data['user_name'] = $this->session->userdata('email/user_name');
+		$data['user_name'] = $this->session->userdata('user_name');
 		$data['is_logged_in'] = $this->session->userdata('is_logged_in');
 		$this->load->view('index', $data);		
 	}
@@ -234,14 +234,17 @@ public function reset_password_validation(){
 		} else {
 			
 			// set variables from the form
-			
+			$user_name = $this->model_users->get_info($this->input->post('email/user_name'));
+			$res = $this->model_users->get_profile($user_name);
 			$data = array (
-				'email/user_name' => $this->input->post('email/user_name'),
+				'user_name' => $res->user_name,
+				'email' => $res->email,
+				'full_name' => $res->full_name,
 				'is_logged_in' => 1
 			);
 
 			$this->session->set_userdata($data);
-			redirect('user/index/'.$this->input->post('email/user_name'));
+			redirect('user/index/'.$user_name);
 				// user login ok
     			}
 				
@@ -269,13 +272,14 @@ public function reset_password_validation(){
 		$this->load->model('model_users');
    		$res = $this->model_users->get_profile($user_name);
    		if($res){
-   			$data['is_logged_in'] = $this->session->userdata('is_logged_in');
-   			$data['email_user_name'] = $this->session->userdata('email/user_name');
-        	$data['user_name'] = $res->user_name;
-        	$data['full_name'] = $res->full_name;
-        	$data['fb_link']   = $res->fb_link;
-        	$data['email'] = $res->email;
-        	$data['dob'] = $res->dob;
+   			// $data['is_logged_in'] = $this->session->userdata('is_logged_in');
+   			// $data['email_user_name'] = $this->session->userdata('email/user_name');
+      //   	$data['user_name'] = $res->user_name;
+      //   	$data['full_name'] = $res->full_name;
+      //   	$data['fb_link']   = $res->fb_link;
+      //   	$data['email'] = $res->email;
+      //   	$data['dob'] = $res->dob;
+   			$data['info'] = json_encode($res); 
         $this->load->view('profile', $data);
    		} else {
         	echo "Fail";
