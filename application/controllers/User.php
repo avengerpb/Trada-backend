@@ -14,6 +14,7 @@ class user extends CI_Controller {
 
 	public function index(){
 		$data['user_name'] = $this->session->userdata('email/user_name');
+		$data['is_logged_in'] = $this->session->userdata('is_logged_in');
 		$this->load->view('index', $data);
 	}
 
