@@ -145,12 +145,6 @@ public function register_user($key){
 
 		if ($this->model_users->is_key_valid($key)){
 			if ($newemail = $this->model_users->add_user($key)){
-				$data = array(
-					'email' => $newemail,
-					'is_logged_in' => 1
-				);
-
-				$this->session->set_userdata($data);
 				redirect('user/login');
 			} else "Failed to add user, please try again.";
 		} else echo "invalid key";
