@@ -8,7 +8,7 @@ class Site_security extends MX_Controller
 
     function _make_sure_is_admin()
     {
-        $is_admin = false;
+        $is_admin = true;
 
         if ($is_admin != true) {
             redirect('site_security/not_allowed');
