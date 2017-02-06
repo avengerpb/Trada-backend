@@ -14,6 +14,9 @@ class user extends CI_Controller {
 
 	public function index(){
 		// $this->load->view('index');
+
+		$data['user_name'] = $this->session->userdata('email/user_name');
+		$this->load->view('index', $data);
 	}
 
 	public function login()
@@ -211,28 +214,32 @@ class user extends CI_Controller {
 		redirect('user/login');
 	}
 
-	public function profile(){
+	public function profile($user_name){
 		$this->load->model('model_users');
-		$user_name = $this->session->userdata('email/user_name');
    		$res = $this->model_users->get_profile($user_name);
    		if($res){
+   			$data['is_logged_in'] = $this->session->userdata('is_logged_in');
+   			$data['email_user_name'] = $this->session->userdata('email/user_name');
         	$data['user_name'] = $res->user_name;
         	$data['full_name'] = $res->full_name;
         	$data['fb_link']   = $res->fb_link;
         	$data['email'] = $res->email;
         	$data['dob'] = $res->dob;
-        	$this->load->view('profile', $data);
+        $this->load->view('profile', $data);
    		} else {
         	echo "Fail";
     	}
 	}
 
-	public function edit_profile(){
-		$this->load->view('edit_profile');
+	public function edit_profile($user_name){
+		if ($user_name != $this->session->userdata('email/user_name')){
+			echo 'you did not logged in as this user!';
+		} else {
+			$this->load->view('edit_profile');
+		}
 	}
 
-	public function edit_profile_form()
-	{
+	public function edit_profile_form(){
 		$this->load->model('model_users');
 		$user_name = $this->input->post('user_name');
 		$user_name = $this->session->userdata('email/user_name');
@@ -246,7 +253,7 @@ class user extends CI_Controller {
 		$data = array_filter($data);
 		if ($this->model_users->edit_profile_data($user_name, $data)){
 			echo "Success";
-			redirect(base_url().'user/profile?user_name='.$user_name);
+			redirect(base_url().'user/profile/'.$user_name);
 		} else echo "failed";
 	}
 }
