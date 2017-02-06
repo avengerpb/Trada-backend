@@ -13,4 +13,4 @@ class Model_search extends CI_Model {
 		$query_user = $this->db->query("SELECT * FROM user WHERE user_name LIKE '%".$search_phrase."%'");
 		return $query_user->result();
 	}
-}
+} 
