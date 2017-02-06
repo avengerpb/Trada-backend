@@ -265,7 +265,7 @@ public function reset_password_validation(){
 		
 	}
 	
-public function profile($user_name){
+	public function profile($user_name){
 		$this->load->model('model_users');
    		$res = $this->model_users->get_profile($user_name);
    		if($res){
@@ -282,7 +282,7 @@ public function profile($user_name){
     	}
 	}
 
-public function edit_profile($user_name){
+	public function edit_profile($user_name){
 		if ($user_name != $this->session->userdata('email/user_name')){
 			echo 'you did not logged in as this user!';
 		} else {
@@ -307,5 +307,6 @@ public function edit_profile($user_name){
 			redirect(base_url().'user/profile/'.$user_name);
 		} else echo "failed";
 	}
+
 }
 
