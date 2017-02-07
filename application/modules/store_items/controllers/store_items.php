@@ -8,8 +8,24 @@ parent::__construct();
 
 function create()
 {
+
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
+
+    $update_id = $this->uri->segment(3);
+    $submit = $this->input->post('submit',true);
+
+    if ((is_numeric($update_id)) && ($submit != 'Submit')) {
+        $data = $this->fetch_data_from_db($update_id);
+    } else {
+        $data = $this->fetch_data_from_post();
+    }
+
+    if (!is_numeric($update_id)) {
+        $data['headline'] = 'Add New Item';
+    } else {
+        $data['headline'] = 'Update Item Details';
+    }
 
     $data['view_module'] = 'store_items';
     $data['view_file'] = 'create';
@@ -26,6 +42,32 @@ function manage()
     $data['view_file'] = 'manage';
     $this->load->module('templates');
     $this->templates->admin($data);
+}
+
+function fetch_data_from_post()
+{
+    $data['item_id'] = $this->input->post('item_id', true);
+    $data['item_name'] = $this->input->post('item_name', true);
+    $data['price'] = $this->input->post('price', true);
+    return $data;
+}
+
+function fetch_data_from_db($update_id)
+{
+    $query = $this->get_where($update_id);
+    foreach ($query->result() as $row) {
+        $data['item_id'] = $row->item_id;
+        $data['shop_id'] = $row->shop_id;
+        $data['item_name'] = $row->item_name;
+        $data['price'] = $row->price;
+        $data['item_image_url'] = $row->item_image_url;
+    }
+
+    if (!isset($data)) {
+        $data = '';
+    }
+
+    return $data;
 }
 
 function get($order_by)
