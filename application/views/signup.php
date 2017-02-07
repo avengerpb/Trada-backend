@@ -6,7 +6,7 @@
 <body>
     <div id ="container">
         <?php
-            echo form_open('user/signup_validation');
+            echo form_open('user/signup');
 
             form_input('email', $this->input->post('email'));
             form_input('user_name', $this->input->post('user_name'));
