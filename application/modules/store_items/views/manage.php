@@ -1,6 +1,6 @@
 <h1>Manage Items</h1>
 
-<?php $create_item_url = base_url().'store_items_create'; ?>
+<?php $create_item_url = base_url().'index.php/store_items/create'; ?>
 
 <p style="margin-top: 30px">
 	<a href="<?= $create_item_url ?>"><button type="button" class="btn btn-primary">Add New Items</button></a>
@@ -31,7 +31,7 @@
 
 						  <!-- <?php 
 						  	foreach ($query->result() as $row) {
-						  		$edit_item_image_url = base_url().'store_items/create/'.$row->item_id;
+						  		$edit_item_image_url = base_url().'index.php/store_items/create/'.$row->item_id;
 						  ?> -->
 
 							<tr>

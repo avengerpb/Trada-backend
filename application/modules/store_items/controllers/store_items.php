@@ -15,6 +15,10 @@ function create()
     $update_id = $this->uri->segment(3);
     $submit = $this->input->post('submit',true);
 
+    if ($submit == 'Submit') {
+        # code...
+    }
+
     if ((is_numeric($update_id)) && ($submit != 'Submit')) {
         $data = $this->fetch_data_from_db($update_id);
     } else {
