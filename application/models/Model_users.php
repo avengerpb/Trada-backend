@@ -36,6 +36,15 @@ class Model_users extends CI_Model {
 		}
 	}
 
+	public function get_info($temp){
+		$query= $this->db->query('select * From user where email = "'.$temp.'";');
+			if ($query){
+				return $query->row()->user_name;
+			} else {
+				return $temp;
+			}
+	}
+
 	public function add_temp_user($key){
 		$data = array (
 			'email' => $this->input->post('email'),
