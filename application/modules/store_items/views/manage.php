@@ -31,10 +31,10 @@
 						  </thead>   
 						  <tbody>
 
-						  <!-- <?php 
+						  <?php 
 						  	foreach ($query->result() as $row) {
 						  		$edit_item_image_url = base_url().'index.php/store_items/create/'.$row->item_id;
-						  ?> -->
+						  ?>
 
 							<tr>
 								<td><?= $row->item_id ?></td>

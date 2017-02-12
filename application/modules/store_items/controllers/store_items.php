@@ -6,7 +6,7 @@ function __construct() {
     parent::__construct();
 
     $this->load->library(array('session', 'form_validation'));
-    $this->load->module('site_security');
+    $this->load->module(array('site_security', 'templates'));
     $this->load->model('mdl_store_items');
 
     $this->form_validation->CI =& $this;
@@ -69,7 +69,6 @@ function create()
     $data['flash'] = $this->session->flashdata('item');
     $data['view_module'] = 'store_items';
     $data['view_file'] = 'create';
-    $this->load->module('templates');
     $this->templates->admin($data);
 }
 
@@ -78,9 +77,11 @@ function manage()
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
 
+    $post_data = $this->fetch_data_from_post();
+    $item_id = $this->mdl_store_items->get_item_id_by_item_name($post_data['item_name']);
+    $data['query'] = $this->get($item_id);
     $data['view_module'] = 'store_items';
-    $data['view_file'] = 'manage';
-    $this->load->module('templates');
+    $data['view_file'] = 'manage';    
     $this->templates->admin($data);
 }
 

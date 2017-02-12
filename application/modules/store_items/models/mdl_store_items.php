@@ -18,6 +18,15 @@ function get($order_by){
     return $query;
 }
 
+function get_item_id_by_item_name($item_name) {
+    $table = $this->get_table();
+    $this->db->select('item_id');
+    $this->db->where('item_name', $item_name);
+    $query=$this->db->get($table);
+    $query=$query->row_array();
+    return $query['item_id'];
+}
+
 function get_with_limit($limit, $offset, $order_by) {
     $table = $this->get_table();
     $this->db->limit($limit, $offset);
