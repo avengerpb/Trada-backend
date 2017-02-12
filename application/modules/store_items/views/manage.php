@@ -3,7 +3,7 @@
 <?php $create_item_url = base_url().'index.php/store_items/create'; ?>
 
 <p style="margin-top: 30px">
-	<a href="<?= $create_item_url ?>"><button type="button" class="btn btn-primary">Add New Items</button></a>
+	<a href="<?= $create_item_url ?>"><button type="button" class="btn btn-primary">Add New Item</button></a>
 </p>
 
 <div class="row-fluid sortable">		
@@ -25,6 +25,8 @@
 								  <th>Item Name</th>
 								  <th>Price</th>
 								  <th>Item Image Url</th>
+								  <th>Status</th>
+								  <th>Action</th>
 							  </tr>
 						  </thead>   
 						  <tbody>

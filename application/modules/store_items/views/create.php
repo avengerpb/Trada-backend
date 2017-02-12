@@ -12,7 +12,6 @@
 					<div class="box-header" data-original-title>
 						<h2><i class="halflings-icon white edit"></i><span class="break"></span>Item Details</h2>
 						<div class="box-icon">
-							<a href="#" class="btn-setting"><i class="halflings-icon white wrench"></i></a>
 							<a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
 							<a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a>
 						</div>
@@ -32,12 +31,12 @@
 							  </div>
 							</div>
 
-							<div class="control-group">
+							<!-- <div class="control-group">
 							  <label class="control-label" for="typeahead">Item ID </label>
 							  <div class="controls">
 								<input type="text" class="span3" name="item_id" value="<?= $item_id ?>">
 							  </div>
-							</div>
+							</div> -->
 
 							<div class="control-group">
 							  <label class="control-label" for="typeahead">Price </label>
@@ -55,7 +54,7 @@
 
 							<div class="form-actions">
 							  <button type="submit" class="btn btn-primary" name="submit" value="Submit">Save changes</button>
-							  <button type="reset" class="btn">Cancel</button>
+							  <button type="submit" class="btn" name="submit" value="Cancel">Cancel</button>
 							</div>
 						  </fieldset>
 						</form>   
