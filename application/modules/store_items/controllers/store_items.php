@@ -67,9 +67,64 @@ function create()
 
     $data['update_id'] = $update_id;
     $data['flash'] = $this->session->flashdata('item');
-    $data['view_module'] = 'store_items';
     $data['view_file'] = 'create';
     $this->templates->admin($data);
+}
+
+function upload_image($update_id)
+{
+    if (!is_numeric($update_id)) {
+        redirect('index.php/site_security/not_allowed');
+    }
+    $this->site_security->_make_sure_is_admin();
+
+    $data['headline'] = 'Upload Image';
+    $data['update_id'] = $update_id;
+    $data['flash'] = $this->session->flashdata('item');
+    $data['view_file'] = 'upload_image';
+    $this->templates->admin($data);
+}
+
+function do_upload($update_id)
+{
+    if (!is_numeric($update_id)) {
+        redirect('index.php/site_security/not_allowed');
+    }
+
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    $submit = $this->input->post('submit',true);
+    if ($submit == 'Submit') {
+        # code...
+    } elseif ($submit == 'Cancel') {
+        redirect('index.php/store_items/create/'.$update_id);
+    }
+
+    $config['upload_path']      = './big_pics/';
+    $config['allowed_types']    = 'gif|jpg|png';
+    $config['max_size']         = 100;
+    $config['max_width']        = 1024;
+    $config['max_height']       = 768;
+
+    $this->load->library('upload', $config);
+
+    if (! $this->upload->do_upload('userfile')) {
+        $data['error'] = array('error' => $this->upload->display_errors('<p style="color: red; !important;">', '</p>'));
+        $data['headline'] = 'Upload Error';
+        $data['update_id'] = $update_id;
+        $data['flash'] = $this->session->flashdata('item');
+        $data['view_file'] = 'upload_image';
+        $this->templates->admin($data);
+    } else {
+        $data = array('upload_data' => $this->upload->data());  
+        $data['headline'] = 'Upload Success';
+        $data['update_id'] = $update_id;
+        $data['flash'] = $this->session->flashdata('item');
+        $data['view_file'] = 'upload_success';
+        $this->templates->admin($data);
+    }
+    
 }
 
 function manage()
@@ -80,7 +135,6 @@ function manage()
     $post_data = $this->fetch_data_from_post();
     $item_id = $this->mdl_store_items->get_item_id_by_item_name($post_data['item_name']);
     $data['query'] = $this->get($item_id);
-    $data['view_module'] = 'store_items';
     $data['view_file'] = 'manage';    
     $this->templates->admin($data);
 }

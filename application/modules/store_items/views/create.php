@@ -5,7 +5,29 @@
 	if (isset($flash)) {
 		echo $flash;
 	}
+
+	if (is_numeric($update_id)) {
 ?>
+<div class="row-fluid sortable">
+	<div class="box span12">
+		<div class="box-header" data-original-title>
+			<h2><i class="halflings-icon white edit"></i><span class="break"></span>Item Options</h2>
+			<div class="box-icon">
+				<a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
+				<a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a>
+			</div>
+		</div>
+		<div class="box-content">
+			<a href="<?= base_url() ?>index.php/store_items/upload_image/<?= $update_id ?>"><button type="button" class="btn btn-primary">Upload Item Image</button></a>
+			<a href=""><button type="button" class="btn btn-primary">Update Item Colors</button></a>
+			<a href=""><button type="button" class="btn btn-primary">Update Item Sizes</button></a>
+			<a href=""><button type="button" class="btn btn-primary">Update Item Categories</button></a>
+			<a href=""><button type="button" class="btn btn-danger">Delete Item</button></a>
+		</div>
+	</div><!--/span-->
+</div><!--/row-->
+<?php } ?>
+
 
 <div class="row-fluid sortable">
 				<div class="box span12">

@@ -25,7 +25,7 @@
 								  <th>Item Name</th>
 								  <th>Price</th>
 								  <th>Item Image Url</th>
-								  <th>Status</th>
+								  <!-- <th>Status</th> -->
 								  <th>Action</th>
 							  </tr>
 						  </thead>   
@@ -42,9 +42,9 @@
 								<td class="center"><?= $row->item_name ?></td>
 								<td class="center"><?= $row->price ?></td>
 								<td class="center"><?= $row->item_image_url ?></td>
-								<td class="center">
+								<!-- <td class="center">
 									<span class="label label-success">Active</span>
-								</td>
+								</td> -->
 								<td class="center">
 									<a class="btn btn-success" href="#">
 										<i class="halflings-icon white zoom-in"></i>  
