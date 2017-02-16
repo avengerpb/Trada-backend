@@ -222,10 +222,8 @@ public function reset_password_validation(){
 		$this->load->library('form_validation');
 		
 		// set validation rules
-		$this->form_validation->set_rules('email/user_name', 'Email/Username', 'required|trim|callback_validate_credentials');
-		$this->form_validation->set_rules('password', 'Password', 'required|md5|trim');
 
-		if ($this->form_validation->run() == false) {
+		if ($this->validate_credentials() == true) {
 			
 			// validation not ok, send validation errors to the view
 			$this->load->view('login');
