@@ -114,8 +114,9 @@ class User extends CI_Controller {
 
 public function validate_credentials(){
 		$this->load->model('model_users');
-
-		if ($this->model_users->can_log_in()){
+		$user_name = $_POST['user_name'];
+		$password = $_POST['password'];
+		if ($this->model_users->can_log_in($user_name, $password)){
 			return true;
 		} else {
 			$this->form_validation->set_message('validate_credentials', 'Incorrect email/username/password.');
@@ -223,7 +224,7 @@ public function reset_password_validation(){
 		
 		// set validation rules
 
-		if ($this->validate_credentials() == true) {
+		if ($this->validate_credentials() == false) {
 			
 			// validation not ok, send validation errors to the view
 			$this->load->view('login');
@@ -231,7 +232,7 @@ public function reset_password_validation(){
 		} else {
 			
 			// set variables from the form
-			$user_name = $this->model_users->get_info($this->input->post('email/user_name'));
+			$user_name = $this->model_users->get_info($_POST[user_name]);
 			$res = $this->model_users->get_profile($user_name);
 			$data = array (
 				'user_name' => $res->user_name,

@@ -31,10 +31,6 @@ class Authentication extends REST_Controller {
         $this->methods['users_delete']['limit'] = 50; // 50 requests per hour per user/key
     }
     public function index_post(){
-        $user = [
-        'user_name' => $this->post('user_name'),
-        'password' => $this->post('password')
-        ];
     }
 
     public function index_get(){
