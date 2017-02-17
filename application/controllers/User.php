@@ -232,7 +232,7 @@ public function reset_password_validation(){
 		} else {
 			
 			// set variables from the form
-			$user_name = $this->model_users->get_info($_POST[user_name]);
+			$user_name = $this->model_users->get_info($_POST['user_name']);
 			$res = $this->model_users->get_profile($user_name);
 			$data = array (
 				'user_name' => $res->user_name,
@@ -242,7 +242,7 @@ public function reset_password_validation(){
 			);
 
 			$this->session->set_userdata($data);
-			redirect('user/index/'.$user_name);
+			echo json_encode($data);
 				// user login ok
     			}
 				
