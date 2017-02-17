@@ -1,6 +1,11 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+</head>
 <?php
 	defined('BASEPATH') OR exit('No direct script access allowed');
 
-	echo $info ?> <br> <?php
+	print_r($info) ?> <br> <?php
 
 ?>
+</html>

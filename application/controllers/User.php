@@ -270,19 +270,30 @@ public function reset_password_validation(){
 	
 	public function profile($user_name){
 		$this->load->model('model_users');
+		if($this->session->userdata('is_logged_in') == 1 && $this->session->userdata('facebook_access_token') != NULL){
+			$data['id'] = $this->session->userdata('id');
+			$data['user_name'] = $this->session->userdata('user_name');
+			$data['email'] = $this->session->userdata('email');
+			$data['link'] = $this->session->userdata('link');
+			$data['birthday'] = $this->session->userdata('birthday');
+			$data['info'] = json_encode($data);
+
+			$this->load->view('profile', $data);
+		} else {
    		$res = $this->model_users->get_profile($user_name);
    		if($res){
-   			// $data['is_logged_in'] = $this->session->userdata('is_logged_in');
-   			// $data['email_user_name'] = $this->session->userdata('email/user_name');
-      //   	$data['user_name'] = $res->user_name;
-      //   	$data['full_name'] = $res->full_name;
-      //   	$data['fb_link']   = $res->fb_link;
-      //   	$data['email'] = $res->email;
-      //   	$data['dob'] = $res->dob;
-   			$data['info'] = json_encode($res); 
-        $this->load->view('profile', $data);
-   		} else {
-        	echo "Fail";
+   			// 	$data['is_logged_in'] = $this->session->userdata('is_logged_in');
+   			// 	$data['email_user_name'] = $this->session->userdata('email/user_name');
+      //   		$data['user_name'] = $res->user_name;
+      //   		$data['full_name'] = $res->full_name;
+      //   		$data['fb_link']   = $res->fb_link;
+      //   		$data['email'] = $res->email;
+      //   		$data['dob'] = $res->dob;
+   				$data['info'] = json_encode($res);
+        		$this->load->view('profile', $data);
+   			} else {
+        		echo "Fail";
+    		}
     	}
 	}
 

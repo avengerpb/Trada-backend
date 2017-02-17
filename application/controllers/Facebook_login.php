@@ -28,7 +28,7 @@ class Facebook_login extends CI_Controller {
 		]);
 
 		$helper = $fb->getRedirectLoginHelper();
-		$permissions = ['public_profile', 'user_friends', 'publish_actions']; // optional
+		$permissions = ['public_profile', 'user_friends', 'publish_actions', 'email', 'user_about_me', 'user_birthday']; // optional
 		$data['login_url'] = $helper->getLoginUrl('http://localhost/trada-backend/index.php/facebook_login/fb_callback', $permissions);
 
 		$this->load->view('home',$data);
@@ -58,8 +58,41 @@ class Facebook_login extends CI_Controller {
 		if (isset($accessToken)) {
   			// Logged in!
   			$_SESSION['facebook_access_token'] = (string) $accessToken;
-  			redirect(base_url()."user/index");
-  			$
+  			$session = $_SESSION['facebook_access_token'];
+
+  			$fbApp = new Facebook\FacebookApp('1175112432606251', 'f26d7b0706b3c2f1a87fe30f0be28f17');
+			$request = new Facebook\FacebookRequest($fbApp, $accessToken, 'GET', '/me', 
+				array('fields' => 'id,name,birthday,email,link'));
+
+
+			try {
+  				$response = $fb->getClient()->sendRequest($request);
+			} catch(Facebook\Exceptions\FacebookResponseException $e) {
+  			// When Graph returns an error
+  			echo 'Graph returned an error: ' . $e->getMessage();
+  			exit;
+			} catch(Facebook\Exceptions\FacebookSDKException $e) {
+  			// When validation fails or other local issues
+  			echo 'Facebook SDK returned an error: ' . $e->getMessage();
+  			exit;
+			}
+
+			$graphNode = $response->getGraphNode();
+
+			/* handle the result */
+  	// 		$message = 'User name: ' . $graphNode['name'];
+  	// 		$data = array (
+  	// 			'id' => $graphNode['id'],
+  	// 			'birthday' => $graphNode['birthday'],
+  	// 			'email' => $graphNode['email'],
+  	// 			'link' => $graphNode['link'],
+			// 	'user_name' => $graphNode['name'],
+			// 	'full_name' => $graphNode['name'],
+			// 	'is_logged_in' => 1
+			// );
+
+  			$this->session->set_userdata($graphNode);
+  			redirect(base_url().'user/index');
   			// Now you can redirect to another page and use the
   			// access token from $_SESSION['facebook_access_token']
 		}
