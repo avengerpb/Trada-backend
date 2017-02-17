@@ -26,7 +26,7 @@ function create()
         if ($this->form_validation->run() == true) {
             //get the variables
             $data = $this->fetch_data_from_post();
-            $data['item_image_url'] = url_title($data['item_name']);
+            // $data['item_url'] = url_title($data['item_name']);
 
             if (is_numeric($update_id)) {
                 //update the item details
@@ -101,7 +101,7 @@ function do_upload($update_id)
         redirect('index.php/store_items/create/'.$update_id);
     }
 
-    $config['upload_path']      = './big_pics/';
+    $config['upload_path']      = './item_images/';
     $config['allowed_types']    = 'gif|jpg|png';
     $config['max_size']         = 100;
     $config['max_width']        = 1024;
@@ -117,7 +117,17 @@ function do_upload($update_id)
         $data['view_file'] = 'upload_image';
         $this->templates->admin($data);
     } else {
+        // Upload success
+
         $data = array('upload_data' => $this->upload->data());  
+
+        $upload_data = $data['upload_data'];
+        $file_name = $upload_data['file_name'];
+        $item_image_url = base_url().'item_images/'.$file_name;
+
+        $update_data['item_image_url'] = $item_image_url;
+        $this->_update($update_id, $update_data);
+
         $data['headline'] = 'Upload Success';
         $data['update_id'] = $update_id;
         $data['flash'] = $this->session->flashdata('item');
@@ -125,6 +135,35 @@ function do_upload($update_id)
         $this->templates->admin($data);
     }
     
+}
+
+function delete_image($update_id)
+{
+    if (!is_numeric($update_id)) {
+        redirect('index.php/site_security/not_allowed');
+    }
+
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    $this->fetch_data_from_db($update_id);
+    $item_image_url = $data['item_image_url'];
+
+    //attempt to remove the image
+    if (file_exists($item_image_url)) {
+        unlink($item_image_url);
+    }
+
+    //update db
+    unset($data);
+    $data['item_image_url'] = '';
+    $this->_update($update_id, $data);
+    
+    $flash_msg = 'The item was successfully deleted !';
+    $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+    $this->session->set_flashdata('item', $value);
+
+    redirect('index.php/store_items/create/'.$update_id);
 }
 
 function manage()
@@ -149,6 +188,10 @@ function fetch_data_from_post()
 
 function fetch_data_from_db($update_id)
 {
+    if (!is_numeric($update_id)) {
+        redirect('index.php/site_security/not_allowed');
+    }
+
     $query = $this->get_where($update_id);
     foreach ($query->result() as $row) {
         $data['item_id'] = $row->item_id;
@@ -241,8 +284,8 @@ function _custom_query($mysql_query)
 function item_check($str)
 {
     $update_id = $this->uri->segment(3);
-    $item_image_url = url_title($str);
-    $mysql_query = "SELECT * FROM `item` WHERE `item_name`='$str' AND `item_image_url`='$item_image_url'";
+    // $item_image_url = url_title($str);
+    $mysql_query = "SELECT * FROM `item` WHERE `item_name`='$str'";
 
     if (is_numeric($update_id)) {
         //update
