@@ -227,13 +227,14 @@ public function reset_password_validation(){
 		if ($this->validate_credentials() == false) {
 			
 			// validation not ok, send validation errors to the view
-			$this->load->view('login');
+			$data = array();
+			echo json_encode($data);
 			
 		} else {
 			
 			// set variables from the form
-			$user_name = $this->model_users->get_info($_POST['user_name']);
-			$res = $this->model_users->get_profile($user_name);
+			// $user_name = $this->model_users->get_info($_POST['user_name']);
+			$res = $this->model_users->get_profile($_POST['user_name']);
 			$data = array (
 				'user_name' => $res->user_name,
 				'email' => $res->email,
