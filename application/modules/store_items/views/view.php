@@ -9,5 +9,7 @@
   		lkadsjf
   	</div>
   </div>
-  <div class="col-md-3">.col-md-3</div>
+  <div class="col-md-3">
+    <?= Modules::run('cart/_draw_add_to_cart', $update_id) ?>
+  </div>
 </div>

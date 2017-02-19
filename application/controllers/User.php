@@ -20,12 +20,8 @@ class User extends CI_Controller {
 		$this->load->library(array('session'));
 		$this->load->helper(array('url'));
 		$this->load->model('model_users');
-		
+		$this->load->
 	}
-
-	public function index(){
-		// $this->load->view('index');
-
 	
 	
 	public function index() {
@@ -270,6 +266,19 @@ public function reset_password_validation(){
 		$this->session->sess_destroy();
 		redirect('user/login');
 		
+	}
+
+	function manage()
+	{
+    	$this->load->module('site_security');
+    	$this->site_security->_make_sure_is_admin();
+	
+    	$data['flash'] = $this->session->flashdata('item');
+	
+    	$data['query'] = $this->get('full_name');
+    	$data['view_file'] = 'manage';    
+    	$this->load->module('templates');
+    	$this->templates->admin($data);
 	}
 	
 	public function profile($user_name){
