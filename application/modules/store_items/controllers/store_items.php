@@ -12,11 +12,41 @@ function __construct() {
     $this->form_validation->CI =& $this;
 }
 
+function manage()
+{
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    $data['flash'] = $this->session->flashdata('item');
+
+    $post_data = $this->fetch_data_from_post();
+    $item_id = $this->mdl_store_items->get_item_id_by_item_name($post_data['item_name']);
+    $data['query'] = $this->get($item_id);
+    $data['view_file'] = 'manage';    
+    $this->templates->admin($data);
+}
+
+function view($update_id)
+{
+    if (!is_numeric($update_id)) {
+        redirect('index.php/site_security/not_allowed');
+    }
+
+    //fetch item details
+    $data = $this->fetch_data_from_db($update_id);
+
+    $data['update_id'] = $update_id;
+    $data['flash'] = $this->session->flashdata('item');
+    $data['view_file'] = 'view';
+    $this->templates->public_bootstrap($data);
+}
+
 function create()
 {
     $this->site_security->_make_sure_is_admin();
     $submit = $this->input->post('submit',true);
     $update_id = $this->uri->segment(3);
+    $item_image_url = $this->mdl_store_items->get_item_image_url($update_id);
 
     if ($submit == 'Submit') {
         // $this->form_validation->set_rules('item_id', 'Item ID', 'required');
@@ -65,6 +95,7 @@ function create()
         $data['headline'] = 'Update Item Details';
     }
 
+    $data['item_image_url'] = $item_image_url;
     $data['update_id'] = $update_id;
     $data['flash'] = $this->session->flashdata('item');
     $data['view_file'] = 'create';
@@ -148,10 +179,12 @@ function delete_image($update_id)
 
     $this->fetch_data_from_db($update_id);
     $item_image_url = $data['item_image_url'];
+    $file_name = basename($item_image_url);
+    $file = base_url().'/item_images/'.$file_name;
 
     //attempt to remove the image
     if (file_exists($item_image_url)) {
-        unlink($item_image_url);
+        unlink($file);
     }
 
     //update db
@@ -166,15 +199,42 @@ function delete_image($update_id)
     redirect('index.php/store_items/create/'.$update_id);
 }
 
-function manage()
+function delete($update_id)
 {
+    if (!is_numeric($update_id)) {
+        redirect('index.php/site_security/not_allowed');
+    }
+
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
 
-    $post_data = $this->fetch_data_from_post();
-    $item_id = $this->mdl_store_items->get_item_id_by_item_name($post_data['item_name']);
-    $data['query'] = $this->get($item_id);
-    $data['view_file'] = 'manage';    
+    $submit = $this->input->post('submit', true);
+    if ($submit == 'Yes - Delete Item') {
+        $this->_delete($update_id);
+
+        $flash_msg = 'The item was successfully deleted !';
+        $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+        $this->session->set_flashdata('item', $value);
+
+        redirect('index.php/store_items/manage');
+    } elseif ($submit == 'Cancel') {
+        redirect('index.php/store_items/create/'.$update_id);
+    }
+}
+
+function deleteconf($update_id)
+{
+    if (!is_numeric($update_id)) {
+        redirect('index.php/site_security/not_allowed');
+    }
+
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    $data['headline'] = 'Delete Item';
+    $data['update_id'] = $update_id;
+    $data['flash'] = $this->session->flashdata('item');
+    $data['view_file'] = 'deleteconf';
     $this->templates->admin($data);
 }
 

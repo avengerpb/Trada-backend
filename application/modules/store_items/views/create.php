@@ -26,10 +26,9 @@
 				<a href="<?= base_url() ?>index.php/store_items/delete_image/<?= $update_id ?>"><button type="button" class="btn btn-danger">Delete Item Image</button></a>
 			<?php } ?>
 
-			<a href=""><button type="button" class="btn btn-primary">Update Item Colors</button></a>
-			<a href=""><button type="button" class="btn btn-primary">Update Item Sizes</button></a>
 			<a href=""><button type="button" class="btn btn-primary">Update Item Categories</button></a>
-			<a href=""><button type="button" class="btn btn-danger">Delete Item</button></a>
+			<a href="<?= base_url() ?>index.php/store_items/deleteconf/<?= $update_id ?>"><button type="button" class="btn btn-danger">Delete Item</button></a>
+			<a href="<?= base_url() ?>index.php/store_items/view/<?= $update_id ?>"><button type="button" class="btn btn-default">View Item In Shop</button></a>
 		</div>
 	</div><!--/span-->
 </div><!--/row-->

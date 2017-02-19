@@ -27,6 +27,24 @@ function get_item_id_by_item_name($item_name) {
     return $query['item_id'];
 }
 
+function get_item_name_by_item_id($item_id) {
+    $table = $this->get_table();
+    $this->db->select('item_name');
+    $this->db->where('item_id', $item_id);
+    $query=$this->db->get($table);
+    $query=$query->row_array();
+    return $query['item_name'];
+}
+
+function get_item_image_url($item_id) {
+    $table = $this->get_table();
+    $this->db->select('item_image_url');
+    $this->db->where('item_id', $item_id);
+    $query=$this->db->get($table);
+    $query=$query->row_array();
+    return $query['item_image_url'];
+}
+
 function get_with_limit($limit, $offset, $order_by) {
     $table = $this->get_table();
     $this->db->limit($limit, $offset);

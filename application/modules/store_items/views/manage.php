@@ -1,6 +1,11 @@
 <h1>Manage Items</h1>
+<?php 
+	if (isset($flash)) {
+		echo $flash;
+	}
 
-<?php $create_item_url = base_url().'index.php/store_items/create'; ?>
+	$create_item_url = base_url().'index.php/store_items/create'; 
+?>
 
 <p style="margin-top: 30px">
 	<a href="<?= $create_item_url ?>"><button type="button" class="btn btn-primary">Add New Item</button></a>
