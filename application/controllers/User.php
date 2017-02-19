@@ -223,8 +223,8 @@ public function reset_password_validation(){
 		$this->load->library('form_validation');
 		
 		// set validation rules
-		$this->form_validation->set_rules('email/user_name', 'Email/Username', 'required|trim|callback_validate_credentials');
-		$this->form_validation->set_rules('password', 'Password', 'required|md5|trim');
+		// $this->form_validation->set_rules('email/user_name', 'Email/Username', 'required|trim|callback_validate_credentials');
+		// $this->form_validation->set_rules('password', 'Password', 'required|md5|trim');
 
 		if ($this->form_validation->run() == false) {
 			
@@ -247,6 +247,7 @@ public function reset_password_validation(){
 			redirect('user/index/'.$user_name);
 				// user login ok
     			}
+
 				
 		}
 		
@@ -262,10 +263,7 @@ public function reset_password_validation(){
 	 * @return void
 	 */
 	public function logout() {
-		
 		$this->session->sess_destroy();
-		redirect('user/login');
-		
 	}
 	
 	public function profile($user_name){
@@ -276,9 +274,11 @@ public function reset_password_validation(){
 			$data['email'] = $this->session->userdata('email');
 			$data['link'] = $this->session->userdata('link');
 			$data['birthday'] = $this->session->userdata('birthday');
-			$data['info'] = json_encode($data);
+			$data['profile_pic_link'] = $this->session->userdata('profile_pic_link');
+			
+			$json_data['info'] = json_encode($data);
 
-			$this->load->view('profile', $data);
+			$this->load->view('profile', $json_data);
 		} else {
    		$res = $this->model_users->get_profile($user_name);
    		if($res){

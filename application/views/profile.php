@@ -5,7 +5,7 @@
 <?php
 	defined('BASEPATH') OR exit('No direct script access allowed');
 
-	print_r($info) ?> <br> <?php
+	print_r(json_decode($info)->user_name); ?> <br> <?php
 
 ?>
 </html>

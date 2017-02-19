@@ -11,12 +11,7 @@ class Facebook_login extends CI_Controller {
 		$this->load->library(array('session'));
 		$this->load->helper(array('url'));
 		$this->load->model('model_users');
-		
-		$fb = new Facebook\Facebook([
-  			'app_id' => '1175112432606251',
-  			'app_secret' => 'f26d7b0706b3c2f1a87fe30f0be28f17',
-  			'default_graph_version' => 'v2.5',
-		]);	
+	
 	}
 
 	public function fb_login(){
@@ -30,8 +25,10 @@ class Facebook_login extends CI_Controller {
 		$helper = $fb->getRedirectLoginHelper();
 		$permissions = ['public_profile', 'user_friends', 'publish_actions', 'email', 'user_about_me', 'user_birthday']; // optional
 		$data['login_url'] = $helper->getLoginUrl('http://localhost/trada-backend/index.php/facebook_login/fb_callback', $permissions);
-
+		// $data = json_encode($data['login_url']);
 		$this->load->view('home',$data);
+
+		// echo $data;
 	}
 
 
@@ -62,7 +59,7 @@ class Facebook_login extends CI_Controller {
 
   			$fbApp = new Facebook\FacebookApp('1175112432606251', 'f26d7b0706b3c2f1a87fe30f0be28f17');
 			$request = new Facebook\FacebookRequest($fbApp, $accessToken, 'GET', '/me', 
-				array('fields' => 'id,name,birthday,email,link'));
+				array('fields' => 'picture{url},id,name,birthday,email,link'));
 
 
 			try {
@@ -78,20 +75,19 @@ class Facebook_login extends CI_Controller {
 			}
 
 			$graphNode = $response->getGraphNode();
-
 			/* handle the result */
   	// 		$message = 'User name: ' . $graphNode['name'];
-  	// 		$data = array (
-  	// 			'id' => $graphNode['id'],
-  	// 			'birthday' => $graphNode['birthday'],
-  	// 			'email' => $graphNode['email'],
-  	// 			'link' => $graphNode['link'],
-			// 	'user_name' => $graphNode['name'],
-			// 	'full_name' => $graphNode['name'],
-			// 	'is_logged_in' => 1
-			// );
+  			$data = array (
+  				'id' => $graphNode['id'],
+  				'birthday' => $graphNode['birthday'],
+  				'email' => $graphNode['email'],
+  				'link' => $graphNode['link'],
+				'user_name' => $graphNode['name'],
+				'is_logged_in' => 1,
+				'profile_pic_link' => json_decode($graphNode['picture'])->url
+			);
 
-  			$this->session->set_userdata($graphNode);
+  			$this->session->set_userdata($data);
   			redirect(base_url().'user/index');
   			// Now you can redirect to another page and use the
   			// access token from $_SESSION['facebook_access_token']
