@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 /**
  * User class.
  * 
@@ -115,8 +114,9 @@ class User extends CI_Controller {
 
 public function validate_credentials(){
 		$this->load->model('model_users');
-
-		if ($this->model_users->can_log_in()){
+		$user_name = $_POST['user_name'];
+		$password = $_POST['password'];
+		if ($this->model_users->can_log_in($user_name, $password)){
 			return true;
 		} else {
 			$this->form_validation->set_message('validate_credentials', 'Incorrect email/username/password.');
@@ -223,19 +223,18 @@ public function reset_password_validation(){
 		$this->load->library('form_validation');
 		
 		// set validation rules
-		$this->form_validation->set_rules('email/user_name', 'Email/Username', 'required|trim|callback_validate_credentials');
-		$this->form_validation->set_rules('password', 'Password', 'required|md5|trim');
 
-		if ($this->form_validation->run() == false) {
+		if ($this->validate_credentials() == false) {
 			
 			// validation not ok, send validation errors to the view
-			$this->load->view('login');
+			$data = array();
+			echo json_encode($data);
 			
 		} else {
 			
 			// set variables from the form
-			$user_name = $this->model_users->get_info($this->input->post('email/user_name'));
-			$res = $this->model_users->get_profile($user_name);
+			// $user_name = $this->model_users->get_info($_POST['user_name']);
+			$res = $this->model_users->get_profile($_POST['user_name']);
 			$data = array (
 				'user_name' => $res->user_name,
 				'email' => $res->email,
@@ -244,9 +243,10 @@ public function reset_password_validation(){
 			);
 
 			$this->session->set_userdata($data);
-			redirect('user/index/'.$user_name);
+			echo json_encode($data);
 				// user login ok
     			}
+
 				
 		}
 		
@@ -262,10 +262,7 @@ public function reset_password_validation(){
 	 * @return void
 	 */
 	public function logout() {
-		
 		$this->session->sess_destroy();
-		redirect('user/login');
-		
 	}
 
 	function manage()
@@ -283,19 +280,32 @@ public function reset_password_validation(){
 	
 	public function profile($user_name){
 		$this->load->model('model_users');
+		if($this->session->userdata('is_logged_in') == 1 && $this->session->userdata('facebook_access_token') != NULL){
+			$data['id'] = $this->session->userdata('id');
+			$data['user_name'] = $this->session->userdata('user_name');
+			$data['email'] = $this->session->userdata('email');
+			$data['link'] = $this->session->userdata('link');
+			$data['birthday'] = $this->session->userdata('birthday');
+			$data['profile_pic_link'] = $this->session->userdata('profile_pic_link');
+			
+			$json_data['info'] = json_encode($data);
+
+			$this->load->view('profile', $json_data);
+		} else {
    		$res = $this->model_users->get_profile($user_name);
    		if($res){
-   			// $data['is_logged_in'] = $this->session->userdata('is_logged_in');
-   			// $data['email_user_name'] = $this->session->userdata('email/user_name');
-      //   	$data['user_name'] = $res->user_name;
-      //   	$data['full_name'] = $res->full_name;
-      //   	$data['fb_link']   = $res->fb_link;
-      //   	$data['email'] = $res->email;
-      //   	$data['dob'] = $res->dob;
-   			$data['info'] = json_encode($res); 
-        $this->load->view('profile', $data);
-   		} else {
-        	echo "Fail";
+   			// 	$data['is_logged_in'] = $this->session->userdata('is_logged_in');
+   			// 	$data['email_user_name'] = $this->session->userdata('email/user_name');
+      //   		$data['user_name'] = $res->user_name;
+      //   		$data['full_name'] = $res->full_name;
+      //   		$data['fb_link']   = $res->fb_link;
+      //   		$data['email'] = $res->email;
+      //   		$data['dob'] = $res->dob;
+   				$data['info'] = json_encode($res);
+        		$this->load->view('profile', $data);
+   			} else {
+        		echo "Fail";
+    		}
     	}
 	}
 
