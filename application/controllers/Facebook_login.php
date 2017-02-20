@@ -26,8 +26,8 @@ class Facebook_login extends CI_Controller {
 		$permissions = ['public_profile', 'user_friends', 'publish_actions', 'email', 'user_about_me', 'user_birthday']; // optional
 		$data['login_url'] = $helper->getLoginUrl('http://localhost/trada-backend/index.php/facebook_login/fb_callback', $permissions);
 		// $data = json_encode($data['login_url']);
-		$this->load->view('home',$data);
-
+		/*$this->load->view('home',$data);*/
+		echo json_encode($data);
 		// echo $data;
 	}
 
@@ -79,7 +79,8 @@ class Facebook_login extends CI_Controller {
   	// 		$message = 'User name: ' . $graphNode['name'];
   			$data = array (
   				'id' => $graphNode['id'],
-  				'birthday' => $graphNode['birthday'],
+  				//'birthday' => $graphNode['birthday'],
+  				'birthday' => '',
   				'email' => $graphNode['email'],
   				'link' => $graphNode['link'],
 				'user_name' => $graphNode['name'],
@@ -88,10 +89,12 @@ class Facebook_login extends CI_Controller {
 			);
 
   			$this->session->set_userdata($data);
-  			redirect(base_url().'user/index');
+  			/*redirect(base_url().'user/index');*/
+  			echo json_encode($data);
   			// Now you can redirect to another page and use the
   			// access token from $_SESSION['facebook_access_token']
 		}
 	}
+
 }
 ?>
