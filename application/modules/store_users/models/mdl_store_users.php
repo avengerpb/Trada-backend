@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class Mdl_store_accounts extends CI_Model
+class Mdl_store_users extends CI_Model
 {
 
 function __construct() {
@@ -9,6 +9,33 @@ parent::__construct();
 function get_table() {
     $table = "user";
     return $table;
+}
+
+function get_user_id_by_user_name($user_name) {
+    $table = $this->get_table();
+    $this->db->select('user_id');
+    $this->db->where('user_name', $user_name);
+    $query=$this->db->get($table);
+    $query=$query->row_array();
+    return $query['user_id'];
+}
+
+function get_user_name_by_user_id($user_id) {
+    $table = $this->get_table();
+    $this->db->select('user_name');
+    $this->db->where('user_id', $user_id);
+    $query=$this->db->get($table);
+    $query=$query->row_array();
+    return $query['user_name'];
+}
+
+function get_user_image_url($user_id) {
+    $table = $this->get_table();
+    $this->db->select('user_image_url');
+    $this->db->where('user_id', $user_id);
+    $query=$this->db->get($table);
+    $query=$query->row_array();
+    return $query['user_image_url'];
 }
 
 function get($order_by){
