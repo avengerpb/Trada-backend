@@ -239,7 +239,8 @@ public function reset_password_validation(){
 				'user_name' => $res->user_name,
 				'email' => $res->email,
 				'full_name' => $res->full_name,
-				'is_logged_in' => 1
+				'is_logged_in' => 1,
+				'user_image_url' => 'https://img.clipartfest.com/47ee79f6915758f2f4d7b33972dc8c17_blank-profile-clip-art-at-clipart-profile-pictures_600-450.png'
 			);
 
 			$this->session->set_userdata($data);
