@@ -23,7 +23,7 @@ class Facebook_login extends CI_Controller {
 		]);
 
 		$helper = $fb->getRedirectLoginHelper();
-		$permissions = ['public_profile', 'user_friends', 'publish_actions', 'email', 'user_about_me', 'user_birthday']; // optional
+		$permissions = ['public_profile', 'user_friends', 'publish_actions', 'email', 'user_about_me', 'user_birthday', 'user_location']; // optional
 		$data['login_url'] = $helper->getLoginUrl('http://localhost/trada-backend/index.php/facebook_login/fb_callback', $permissions);
 		// $data = json_encode($data['login_url']);
 		/*$this->load->view('home',$data);*/
@@ -59,7 +59,7 @@ class Facebook_login extends CI_Controller {
 
   			$fbApp = new Facebook\FacebookApp('1175112432606251', 'f26d7b0706b3c2f1a87fe30f0be28f17');
 			$request = new Facebook\FacebookRequest($fbApp, $accessToken, 'GET', '/me', 
-				array('fields' => 'picture{url},id,name,birthday,email,link'));
+				array('fields' => 'picture{url},id,name,birthday,email,link,location'));
 
 
 			try {
@@ -94,6 +94,7 @@ class Facebook_login extends CI_Controller {
   				'email' => $graphNode['email'],
   				'fb_link' => $graphNode['link'],
 				'full_name' => $graphNode['name'],
+				'location' => $graphNode['location'],
 				'user_image_url' => json_decode($graphNode['picture'])->url
 			);
 			$this->load->model('model_users');
