@@ -79,6 +79,7 @@ class Model_users extends CI_Model {
 			$row = $temp_user->row();
 			$data = array(
 				'user_name' => $row->user_name,
+				'full_name' => $row->user_name,
 				'email' => $row->email,
 				'password' => $row->password
 			);
@@ -91,6 +92,19 @@ class Model_users extends CI_Model {
 			$this->db->delete('temp_user');
 			return true;
 		} else return false;
+	}
+
+	public function add_fb_user($user_name, $data){
+		$this->db->where('user_name', $user_name);
+		$exist = $this->db->get('user');
+		if($exist->num_rows()==0){
+			$query = $this->db->insert('user', $data);
+			if ($query){
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
 
 	public function reset_password($new_password, $email){
@@ -143,7 +157,7 @@ class Model_users extends CI_Model {
     		if ($query1){
     			return true;
     		} else return false;
-		} 
+		}
 	}
 
 }

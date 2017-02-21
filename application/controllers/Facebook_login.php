@@ -77,24 +77,34 @@ class Facebook_login extends CI_Controller {
 			$graphNode = $response->getGraphNode();
 			/* handle the result */
   	// 		$message = 'User name: ' . $graphNode['name'];
-  			$data = array (
-  				'id' => $graphNode['id'],
+  			$data_session = array (
   				//'birthday' => $graphNode['birthday'],
-  				'birthday' => '',
   				'email' => $graphNode['email'],
-  				'link' => $graphNode['link'],
-				'user_name' => $graphNode['name'],
+				'user_name' => $graphNode['id'],
+				'full_name' => $graphNode['name'],
 				'is_logged_in' => 1,
-				'profile_pic_link' => json_decode($graphNode['picture'])->url
+				'user_image_url' => json_decode($graphNode['picture'])->url
 			);
+  			$this->session->set_userdata($data_session);
 
-  			$this->session->set_userdata($data);
+			$data_dtb = array (
+  				'user_name' => $graphNode['id'],
+  				//'birthday' => $graphNode['birthday'],
+  				'dob' => '',
+  				'email' => $graphNode['email'],
+  				'fb_link' => $graphNode['link'],
+				'full_name' => $graphNode['name'],
+				'user_image_url' => json_decode($graphNode['picture'])->url
+			);
+			$this->load->model('model_users');
+			$this->model_users->add_fb_user($graphNode['id'], $data_dtb);
+  			
   			/*redirect(base_url().'user/index');*/
   			 /*echo json_encode($data);*/
   			/*$cookie = setcookie('json', $data);*/
   			// Now you can redirect to another page and use the
   			// access token from $_SESSION['facebook_access_token']
-  			$data = json_encode($data);
+  			$data = json_encode($data_session);
   			setcookie('facebook', $data, time()+1, "/");
   			include('http://localhost/trada-frontend/index.html');
   			redirect('http://localhost/trada-frontend/index.html');
