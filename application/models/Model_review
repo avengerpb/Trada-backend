@@ -1,0 +1,67 @@
+<?php
+
+class Model_review extends CI_Model {
+	public function get_review_shop($shop_id){
+		$review_shop = $this->db->query("SELECT * FROM review WHERE shop_id = '".$shop_id."'");
+		return $review_shop->result();
+	}
+
+	public function get_review_id($review_id){
+		$review_id = $this->db->query("SELECT * FROM review WHERE review_id = '".$review_id."'");
+		return $review_id->result();
+	}
+
+	public function get_review_user($user_id){
+		$review_user = $this->db->query("SELECT * FROM review WHERE user_id = '".$user_id."'");
+		return $review_user->result();
+	}
+
+	public function get_shop_id($item_id){
+		$shop_id = $this->db->query("SELECT shop_id FROM item_shop WHERE item_id = '".$item_id."'");
+		return $shop_id->result();
+	}
+
+	public function get_category_id($item_id){
+		$category_id = $this->db->query("SELECT category_id FROM category_item WHERE item_id = '".$item_id."'");
+		return $category_id->result();
+	}
+
+	public function set_review($review){
+		var $set = $this->db->query(" UPDATE review SET review_id = '".$review=>id."',
+											 point = '".$review=>point."',
+											 comment = '".$review=>comment."', 
+											 user_id = '".$review=>user_id."', 
+											 created_time = '".$review=>created_time."', 
+											 shop_id = '".$review=>shop_id."',
+											 category_id = '".$review=>category_id."'  WHERE review_id='".$review_id."'");
+		if ($set) {
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	public function count_review_category($shop_id,$category_id){
+		$count =  $this->db->query("SELECT COUNT(DISTINCT review_id) FROM review WHERE shop_id='".$shop_id."' 
+			AND category_id ='".$category_id."'");
+		return $count;
+	}
+
+	public function total_point_category($shop_id,$category_id){
+		$total = $this->db->query("SELECT SUM(point) FROM review WHERE shop_id='".$shop_id."' 
+			AND category_id ='".$category_id."'");
+		return $total;
+	}
+
+	public function count_review_shop($shop_id){
+		$count =  $this->db->query("SELECT COUNT(DISTINCT review_id) FROM review WHERE shop_id='".$shop_id."'");
+		return $count;
+	}
+
+	public function total_point_shop($shop_id){
+		$total = $this->db->query("SELECT SUM(point) FROM review WHERE shop_id='".$shop_id."'");
+		return $total;
+	}
+}
