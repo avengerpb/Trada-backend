@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-require_once __DIR__ . '\php-graph-sdk-5.4\src\Facebook\autoload.php';
+require_once __DIR__ . '/php-graph-sdk-5.4/src/Facebook/autoload.php';
 
 class Facebook_login extends CI_Controller {
 
@@ -96,8 +96,8 @@ class Facebook_login extends CI_Controller {
   			// access token from $_SESSION['facebook_access_token']
   			$data = json_encode($data);
   			setcookie('facebook', $data, time()+1, "/");
-  			include('http://localhost/trada-frontend/index.html');
-  			redirect('http://localhost/trada-frontend/index.html');
+  			include('http://localhost/Trada-frontend/index.html');
+  			redirect('http://localhost/Trada-frontend/index.html');
   			/*redirect('http://localhost/trada-frontend/index.html', $_COOKIE['facebook']);*/
 		}
 	}
