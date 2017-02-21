@@ -1,9 +1,14 @@
 <h1>Manage Items</h1>
+<?php 
+	if (isset($flash)) {
+		echo $flash;
+	}
 
-<?php $create_item_url = base_url().'index.php/store_items/create'; ?>
+	$create_item_url = base_url().'index.php/store_items/create'; 
+?>
 
 <p style="margin-top: 30px">
-	<a href="<?= $create_item_url ?>"><button type="button" class="btn btn-primary">Add New Items</button></a>
+	<a href="<?= $create_item_url ?>"><button type="button" class="btn btn-primary">Add New Item</button></a>
 </p>
 
 <div class="row-fluid sortable">		
@@ -25,14 +30,16 @@
 								  <th>Item Name</th>
 								  <th>Price</th>
 								  <th>Item Image Url</th>
+								  <!-- <th>Status</th> -->
+								  <th>Action</th>
 							  </tr>
 						  </thead>   
 						  <tbody>
 
-						  <!-- <?php 
+						  <?php 
 						  	foreach ($query->result() as $row) {
 						  		$edit_item_image_url = base_url().'index.php/store_items/create/'.$row->item_id;
-						  ?> -->
+						  ?>
 
 							<tr>
 								<td><?= $row->item_id ?></td>
@@ -40,9 +47,9 @@
 								<td class="center"><?= $row->item_name ?></td>
 								<td class="center"><?= $row->price ?></td>
 								<td class="center"><?= $row->item_image_url ?></td>
-								<td class="center">
+								<!-- <td class="center">
 									<span class="label label-success">Active</span>
-								</td>
+								</td> -->
 								<td class="center">
 									<a class="btn btn-success" href="#">
 										<i class="halflings-icon white zoom-in"></i>  
