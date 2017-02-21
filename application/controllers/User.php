@@ -21,10 +21,6 @@ class User extends CI_Controller {
 		$this->load->model('model_users');
 		
 	}
-
-	public function index(){
-		// $this->load->view('index');
-
 	
 	
 	public function index() {
