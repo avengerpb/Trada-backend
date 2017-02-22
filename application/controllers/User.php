@@ -298,17 +298,13 @@ public function reset_password_validation(){
 	}
 
 	public function edit_profile($user_name){
-		if ($user_name != $this->session->userdata('email/user_name')){
-			echo 'you did not logged in as this user!';
-		} else {
 			$this->load->view('edit_profile');
-		}
+
 	}
 
 	public function edit_profile_form(){
 		$this->load->model('model_users');
-		$user_name = $this->input->post('user_name');
-		$user_name = $this->session->userdata('email/user_name');
+		$user_name = $this->session->userdata('user_name');
 		$data = array(
 			'full_name' => $this->input->post('full_name'),
 			'dob' => $this->input->post('dob'),
