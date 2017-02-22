@@ -108,7 +108,7 @@ function create_users()
                 $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
 
                 $this->session->set_flashdata('user', $value);
-                redirect('index.php/store_users/create_users/'.$update_id);
+                redirect('index.php/store_users/manage_users/');
             }
             
         }

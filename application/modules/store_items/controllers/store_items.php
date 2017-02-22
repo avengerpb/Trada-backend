@@ -255,7 +255,6 @@ function fetch_data_from_db($update_id)
     $query = $this->get_where($update_id);
     foreach ($query->result() as $row) {
         $data['item_id'] = $row->item_id;
-        $data['shop_id'] = $row->shop_id;
         $data['item_name'] = $row->item_name;
         $data['price'] = $row->price;
         $data['item_image_url'] = $row->item_image_url;
