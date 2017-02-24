@@ -268,18 +268,18 @@ public function reset_password_validation(){
 	
 	public function profile($user_name){
 		$this->load->model('model_users');
-		if($this->session->userdata('is_logged_in') == 1 && $this->session->userdata('facebook_access_token') != NULL){
-			$data['id'] = $this->session->userdata('id');
-			$data['user_name'] = $this->session->userdata('user_name');
-			$data['email'] = $this->session->userdata('email');
-			$data['link'] = $this->session->userdata('link');
-			$data['birthday'] = $this->session->userdata('birthday');
-			$data['profile_pic_link'] = $this->session->userdata('profile_pic_link');
+		// if($this->session->userdata('is_logged_in') == 1 && $this->session->userdata('facebook_access_token') != NULL){
+		// 	$data['id'] = $this->session->userdata('id');
+		// 	$data['user_name'] = $this->session->userdata('user_name');
+		// 	$data['email'] = $this->session->userdata('email');
+		// 	$data['link'] = $this->session->userdata('link');
+		// 	$data['birthday'] = $this->session->userdata('birthday');
+		// 	$data['profile_pic_link'] = $this->session->userdata('profile_pic_link');
 			
-			$json_data['info'] = json_encode($data);
+		// 	$json_data['info'] = json_encode($data);
 
-			$this->load->view('profile', $json_data);
-		} else {
+		// 	$this->load->view('profile', $json_data);
+		// } else {
    		$res = $this->model_users->get_profile($user_name);
    		if($res){
    			// 	$data['is_logged_in'] = $this->session->userdata('is_logged_in');
@@ -289,12 +289,12 @@ public function reset_password_validation(){
       //   		$data['fb_link']   = $res->fb_link;
       //   		$data['email'] = $res->email;
       //   		$data['dob'] = $res->dob;
-   				$data['info'] = json_encode($res);
-        		$this->load->view('profile', $data);
+   				$data = json_encode($res);
+        		echo $data;
    			} else {
         		echo "Fail";
-    		}
     	}
+    	// }
 	}
 
 	public function edit_profile($user_name){
@@ -307,20 +307,22 @@ public function reset_password_validation(){
 
 	public function edit_profile_form(){
 		$this->load->model('model_users');
-		$user_name = $this->input->post('user_name');
-		$user_name = $this->session->userdata('email/user_name');
+		/*$user_name = $this->input->post('user_name');*/
+		/*$user_name = $_POST['user_name'];*/
 		$data = array(
-			'full_name' => $this->input->post('full_name'),
-			'dob' => $this->input->post('dob'),
-			'password' => md5($this->input->post('password')),
-			'user_image_url'=> $this->input->post('user_image_url'),
-			'fb_link' => $this->input->post('fb_link')
+			'full_name' => $_POST['full_name'],
+			'dob' => $_POST['dob'],
+			/*'password' => md5($this->input->post('password')),*/
+			'email' => $_POST['email'],
+			/*'user_image_url'=> $this->input->post('user_image_url'),*/
+			'location' => $_POST['location'],
+			'fb_link' => $_POST['link']
 			);
 		$data = array_filter($data);
-		if ($this->model_users->edit_profile_data($user_name, $data)){
-			echo "Success";
-			redirect(base_url().'user/profile/'.$user_name);
-		} else echo "failed";
+		if ($this->model_users->edit_profile_data($_POST['user_name'], $data)){
+			echo json_encode($data);
+			/*redirect(base_url().'user/profile/'.$user_name);*/
+		}
 	}
 
 }

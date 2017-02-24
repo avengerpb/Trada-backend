@@ -98,17 +98,11 @@ class Facebook_login extends CI_Controller {
 			);
 			$this->load->model('model_users');
 			$this->model_users->add_fb_user($graphNode['id'], $data_dtb);
-  			
-  			/*redirect(base_url().'user/index');*/
-  			 /*echo json_encode($data);*/
-  			/*$cookie = setcookie('json', $data);*/
-  			// Now you can redirect to another page and use the
-  			// access token from $_SESSION['facebook_access_token']
+
   			$data = json_encode($data_session);
   			setcookie('facebook', $data, time()+1, "/");
   			include('http://localhost/trada-frontend/index.html');
   			redirect('http://localhost/trada-frontend/index.html');
-  			/*redirect('http://localhost/trada-frontend/index.html', $_COOKIE['facebook']);*/
 		}
 	}
 

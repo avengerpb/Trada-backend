@@ -153,10 +153,14 @@ class Model_users extends CI_Model {
 		$this->db->where($type, $user_name);
 		$query = $this->db->get('user');
 		if ($query->num_rows() > 0){
+			$this->db->where('email', $_POST['email']);
 			$query1 = $this->db->update('user', $data);      
     		if ($query1){
     			return true;
     		} else return false;
+		}
+		else{
+			$this->db->insert('user', $data);
 		}
 	}
 
