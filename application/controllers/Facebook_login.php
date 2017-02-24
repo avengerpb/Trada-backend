@@ -26,8 +26,8 @@ class Facebook_login extends CI_Controller {
 		$permissions = ['public_profile', 'user_friends', 'publish_actions', 'email', 'user_about_me', 'user_birthday', 'user_location','publish_pages', 'pages_show_list','pages_manage_instant_articles','pages_manage_cta','manage_pages']; // optional
 		$data['login_url'] = $helper->getLoginUrl('http://localhost/trada-backend/index.php/facebook_login/fb_callback', $permissions);
 		// $data = json_encode($data['login_url']);
-		$this->load->view('home',$data);
-		// echo json_encode($data);
+		/*$this->load->view('home',$data);*/
+		echo json_encode($data);
 		// echo $data;
 	}
 
