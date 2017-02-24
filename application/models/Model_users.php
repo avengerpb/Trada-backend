@@ -47,11 +47,10 @@ class Model_users extends CI_Model {
 
 	public function add_temp_user($key){
 		$data = array (
-			'email' => $this->input->post('email'),
-			'password' => md5($this->input->post('password')),
-			'user_name' => $this->input->post('user_name'),
+			'email' => $_POST['email'],
+			'password' => md5($_POST['password']),
+			'user_name' =>  $_POST['user_name'],
 			'keyid' => $key
-
 		);
 
 		$query = $this->db->insert('temp_user', $data);
