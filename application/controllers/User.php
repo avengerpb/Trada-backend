@@ -44,16 +44,46 @@ class User extends CI_Controller {
 	 * @return void
 	 */
 	public function signup() {
-		if ($this->session->userdata('admin') == 1){
-		redirect("/");
-		}
-		else {
-		// create the data object
 		$data = new stdClass();
-		echo "hello";
+		$data = array( 'user_name' => '', 'password' => '', 'email' => '', 'status' => '');
+
+		$this->load->model('model_users');
+		$user_name = $_POST['user_name'];
+		$email = $_POST['email'];
+		$password = $_POST['password'];
+		$cpassword = $_POST['cpassword'];
+
+		if($user_name == '' || $email == '' || $password == ''){
+			$data['status'] = 'empty';
+		}else{
+			if($this->model_users->check_user_name_valid($user_name) == false){
+				$data['user_name'] = 'inuse';
+			}
+			if( $email != "" && !preg_match( "/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/", $_POST['email'] ) ) {
+				$data['email'] = 'notvalid';
+			}else{
+				if($this->model_users->check_email_valid($email) == false){
+					$data['email'] = 'inuse';
+				}
+			}
+			if($password != $cpassword){
+				$data['password'] = 'mismatch';
+			}
+		}
+
+		if($data['status'] != '' || $data['user_name'] != '' || $data['email'] != '' || $data['password'] != ''){
+			echo json_encode($data);
+		}else{
+		// if ($this->session->userdata('admin') == 1){
+		// redirect("/");
+		// }
+		// else {
+		// create the data object
+		
+		
 		// load form helper and validation library
-		$this->load->helper('form');
-		$this->load->library('form_validation');
+		// $this->load->helper('form');
+		// $this->load->library('form_validation');
 		// $user_name = $_POST['user_name'];
 		// $full_name = $_POST['full_name'];
 		// $password = $_POST['password'];
@@ -95,7 +125,7 @@ class User extends CI_Controller {
 
 
 			$this->load->library('email', array('mailtype'=>'html'));
-			$this->load->model('model_users');
+			
 
 			$this->email->initialize($config);
 
@@ -110,6 +140,7 @@ class User extends CI_Controller {
 
 			if ($this->model_users->add_temp_user($key)){
 				if ($this->email->send()) {
+					echo 'success';
 					redirect('user/attention');;
 				} else echo "The email cant be sent";
 			} else echo "problem adding to database.";

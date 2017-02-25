@@ -45,6 +45,24 @@ class Model_users extends CI_Model {
 			}
 	}
 
+	public function check_user_name_valid($user_name){
+		$this->db->where('user_name', $user_name);
+		$query = $this->db->get('user');
+
+		if ($query->num_rows()==0){
+			return true;
+		}else return false;
+	}
+
+	public function check_email_valid($email){
+		$this->db->where('email', $email);
+		$query = $this->db->get('user');
+
+		if ($query->num_rows()==0){
+			return true;
+		}else return false;
+	}
+
 	public function add_temp_user($key){
 		$data = array (
 			'email' => $_POST['email'],
