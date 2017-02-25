@@ -151,9 +151,15 @@ class Facebook_login extends CI_Controller {
   			'photos' => json_decode($graphNode['photos'])
 		);
   			
+		print_r(json_decode($graphNode['cover'])->source);
+		echo "<br>";
+		foreach (json_decode($graphNode['photos']) as $image){
+			echo "<br>";
+			print_r($image->images[0]->source);
+		}
+		
 
   		$data = json_encode($data);
-  		print_r($data);
 		
 	}
 }
