@@ -74,37 +74,6 @@ class User extends CI_Controller {
 		if($data['status'] != '' || $data['user_name'] != '' || $data['email'] != '' || $data['password'] != ''){
 			echo json_encode($data);
 		}else{
-		// if ($this->session->userdata('admin') == 1){
-		// redirect("/");
-		// }
-		// else {
-		// create the data object
-		
-		
-		// load form helper and validation library
-		// $this->load->helper('form');
-		// $this->load->library('form_validation');
-		// $user_name = $_POST['user_name'];
-		// $full_name = $_POST['full_name'];
-		// $password = $_POST['password'];
-		// $cpassword = $_POST['cpassword'];
-		// $email = $_POST['email'];
-
-		// echo $user_name;
-		
-		// set validation rules
-		// $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]');
-		// $this->form_validation->set_rules('user_name', 'User Name', 'required|trim|is_unique[user.user_name]');
-		// $this->form_validation->set_rules('password', 'Password', 'required|trim');
-		// $this->form_validation->set_rules('cpassword', 'Comfirm Password', 'required|trim|matches[password]');
-
-		// $this->form_validation->set_message('is_unique', 'The Email/UserName you entered already existed');
-		
-		// if ($this->form_validation->run() === false) {
-			
-			// validation not ok, send validation errors to the view
-			// $this->load->view('signup');
-		// } else {
 			
 			$key = md5(uniqid());
 
@@ -140,8 +109,9 @@ class User extends CI_Controller {
 
 			if ($this->model_users->add_temp_user($key)){
 				if ($this->email->send()) {
-					echo 'success';
-					redirect('user/attention');;
+					$data['status'] = 'ok';
+					echo json_encode($data);
+					/*redirect('user/attention');;*/
 				} else echo "The email cant be sent";
 			} else echo "problem adding to database.";
 			
