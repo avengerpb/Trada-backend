@@ -44,30 +44,35 @@ class User extends CI_Controller {
 	 * @return void
 	 */
 	public function signup() {
-		if ($this->session->userdata('admin') == 1){
-		redirect("/");
-		}
-		else {
-		// create the data object
 		$data = new stdClass();
-		
-		// load form helper and validation library
-		$this->load->helper('form');
-		$this->load->library('form_validation');
-		
-		// set validation rules
-		$this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]');
-		$this->form_validation->set_rules('user_name', 'User Name', 'required|trim|is_unique[user.user_name]');
-		$this->form_validation->set_rules('password', 'Password', 'required|trim|matches[cpassword]');
-		$this->form_validation->set_rules('cpassword', 'Comfirm Password', 'required|trim|matches[password]');
+		$data = array( 'user_name' => '', 'password' => '', 'email' => '', 'status' => '');
+		$this->load->model('model_users');
+		$user_name = $_POST['user_name'];
+		$email = $_POST['email'];
+		$password = $_POST['password'];
+		$cpassword = $_POST['cpassword'];
 
-		$this->form_validation->set_message('is_unique', 'The Email/UserName you entered already existed');
-		
-		if ($this->form_validation->run() === false) {
-			
-			// validation not ok, send validation errors to the view
-			$this->load->view('signup');
-		} else {
+		if($user_name == '' || $email == '' || $password == ''){
+			$data['status'] = 'empty';
+		}else{
+			if($this->model_users->check_user_name_valid($user_name) == false){
+				$data['user_name'] = 'inuse';
+			}
+			if( $email != "" && !preg_match( "/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/", $_POST['email'] ) ) {
+				$data['email'] = 'notvalid';
+			}else{
+				if($this->model_users->check_email_valid($email) == false){
+					$data['email'] = 'inuse';
+				}
+			}
+			if($password != $cpassword){
+				$data['password'] = 'mismatch';
+			}
+		}
+
+		if($data['status'] != '' || $data['user_name'] != '' || $data['email'] != '' || $data['password'] != ''){
+			echo json_encode($data);
+		}else{
 			
 			$key = md5(uniqid());
 
@@ -88,7 +93,7 @@ class User extends CI_Controller {
 
 
 			$this->load->library('email', array('mailtype'=>'html'));
-			$this->load->model('model_users');
+			
 
 			$this->email->initialize($config);
 
@@ -103,13 +108,15 @@ class User extends CI_Controller {
 
 			if ($this->model_users->add_temp_user($key)){
 				if ($this->email->send()) {
-					redirect('user/attention');;
+					$data['status'] = 'ok';
+					echo json_encode($data);
+					/*redirect('user/attention');;*/
 				} else echo "The email cant be sent";
 			} else echo "problem adding to database.";
 			
 		}
 		
-	}
+	// }
 }	
 
 public function validate_credentials(){
@@ -145,7 +152,7 @@ public function register_user($key){
 
 		if ($this->model_users->is_key_valid($key)){
 			if ($newemail = $this->model_users->add_user($key)){
-				redirect('user/login');
+				redirect('http://localhost/trada/');
 			} else "Failed to add user, please try again.";
 		} else echo "invalid key";
 	}
@@ -268,18 +275,18 @@ public function reset_password_validation(){
 
 	public function profile($user_name){
 		$this->load->model('model_users');
-		if($this->session->userdata('is_logged_in') == 1 && $this->session->userdata('facebook_access_token') != NULL){
-			$data['id'] = $this->session->userdata('id');
-			$data['user_name'] = $this->session->userdata('user_name');
-			$data['email'] = $this->session->userdata('email');
-			$data['link'] = $this->session->userdata('link');
-			$data['birthday'] = $this->session->userdata('birthday');
-			$data['profile_pic_link'] = $this->session->userdata('profile_pic_link');
+		// if($this->session->userdata('is_logged_in') == 1 && $this->session->userdata('facebook_access_token') != NULL){
+		// 	$data['id'] = $this->session->userdata('id');
+		// 	$data['user_name'] = $this->session->userdata('user_name');
+		// 	$data['email'] = $this->session->userdata('email');
+		// 	$data['link'] = $this->session->userdata('link');
+		// 	$data['birthday'] = $this->session->userdata('birthday');
+		// 	$data['profile_pic_link'] = $this->session->userdata('profile_pic_link');
 			
-			$json_data['info'] = json_encode($data);
+		// 	$json_data['info'] = json_encode($data);
 
-			$this->load->view('profile', $json_data);
-		} else {
+		// 	$this->load->view('profile', $json_data);
+		// } else {
    		$res = $this->model_users->get_profile($user_name);
    		if($res){
    			// 	$data['is_logged_in'] = $this->session->userdata('is_logged_in');
@@ -289,38 +296,41 @@ public function reset_password_validation(){
       //   		$data['fb_link']   = $res->fb_link;
       //   		$data['email'] = $res->email;
       //   		$data['dob'] = $res->dob;
-   				$data['info'] = json_encode($res);
-        		$this->load->view('profile', $data);
+   				$data = json_encode($res);
+        		echo $data;
    			} else {
         		echo "Fail";
-    		}
     	}
+    	// }
 	}
 
 	public function edit_profile($user_name){
-		if ($user_name != $this->session->userdata('email/user_name')){
-			echo 'you did not logged in as this user!';
-		} else {
 			$this->load->view('edit_profile');
-		}
+
 	}
 
 	public function edit_profile_form(){
 		$this->load->model('model_users');
-		$user_name = $this->input->post('user_name');
-		$user_name = $this->session->userdata('email/user_name');
+
+		/*$user_name = $this->input->post('user_name');*/
+		/*$user_name = $_POST['user_name'];*/
+
+		$user_name = $this->session->userdata('user_name');
+
 		$data = array(
-			'full_name' => $this->input->post('full_name'),
-			'dob' => $this->input->post('dob'),
-			'password' => md5($this->input->post('password')),
-			'user_image_url'=> $this->input->post('user_image_url'),
-			'fb_link' => $this->input->post('fb_link')
+			'full_name' => $_POST['full_name'],
+			'dob' => $_POST['dob'],
+			/*'password' => md5($this->input->post('password')),*/
+			'email' => $_POST['email'],
+			/*'user_image_url'=> $this->input->post('user_image_url'),*/
+			'location' => $_POST['location'],
+			'fb_link' => $_POST['link']
 			);
 		$data = array_filter($data);
-		if ($this->model_users->edit_profile_data($user_name, $data)){
-			echo "Success";
-			redirect(base_url().'user/profile/'.$user_name);
-		} else echo "failed";
+		if ($this->model_users->edit_profile_data($_POST['user_name'], $data)){
+			echo json_encode($data);
+			/*redirect(base_url().'user/profile/'.$user_name);*/
+		}
 	}
 
 }

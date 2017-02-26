@@ -45,13 +45,30 @@ class Model_users extends CI_Model {
 			}
 	}
 
+	public function check_user_name_valid($user_name){
+		$this->db->where('user_name', $user_name);
+		$query = $this->db->get('user');
+
+		if ($query->num_rows()==0){
+			return true;
+		}else return false;
+	}
+
+	public function check_email_valid($email){
+		$this->db->where('email', $email);
+		$query = $this->db->get('user');
+
+		if ($query->num_rows()==0){
+			return true;
+		}else return false;
+	}
+
 	public function add_temp_user($key){
 		$data = array (
-			'email' => $this->input->post('email'),
-			'password' => md5($this->input->post('password')),
-			'user_name' => $this->input->post('user_name'),
+			'email' => $_POST['email'],
+			'password' => md5($_POST['password']),
+			'user_name' =>  $_POST['user_name'],
 			'keyid' => $key
-
 		);
 
 		$query = $this->db->insert('temp_user', $data);
@@ -79,6 +96,7 @@ class Model_users extends CI_Model {
 			$row = $temp_user->row();
 			$data = array(
 				'user_name' => $row->user_name,
+				'full_name' => $row->user_name,
 				'email' => $row->email,
 				'password' => $row->password
 			);
@@ -91,6 +109,19 @@ class Model_users extends CI_Model {
 			$this->db->delete('temp_user');
 			return true;
 		} else return false;
+	}
+
+	public function add_fb_user($user_name, $data){
+		$this->db->where('user_name', $user_name);
+		$exist = $this->db->get('user');
+		if($exist->num_rows()==0){
+			$query = $this->db->insert('user', $data);
+			if ($query){
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
 
 	public function reset_password($new_password, $email){
@@ -139,11 +170,15 @@ class Model_users extends CI_Model {
 		$this->db->where($type, $user_name);
 		$query = $this->db->get('user');
 		if ($query->num_rows() > 0){
+			$this->db->where('email', $_POST['email']);
 			$query1 = $this->db->update('user', $data);      
     		if ($query1){
     			return true;
     		} else return false;
-		} 
+		}
+		else{
+			$this->db->insert('user', $data);
+		}
 	}
 
 }
