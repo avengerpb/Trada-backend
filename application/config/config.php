@@ -28,7 +28,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // $path = "http://" . $_SERVER['HTTP_HOST'] . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
 // $config['base_url'] = $path;
 
-$config['base_url'] = 'http://localhost/trada-backend/';
+$config['base_url'] = 'http://trada.mybluemix.net/index.php';
 
 $config['index_page'] = '';
 

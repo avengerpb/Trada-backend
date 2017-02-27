@@ -1,0 +1,13 @@
+declared-services:
+  tradadb:
+    label: cleardb
+    plan: spark
+applications:
+- name: trada
+  host: trada
+  memory: 128M
+  instances: 1
+  path: .
+  buildpack:
+  services:
+  - tradadb

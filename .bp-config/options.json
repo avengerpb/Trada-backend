@@ -1,3 +1,5 @@
 {
-     "PHP_EXTENSIONS": ["mysql","mysqli","curl","gd"]
+    "PHP_MODULES": ["cli"],
+    "PHP_EXTENSIONS": ["mysqli", "curl"],
+    "ADDITIONAL_PREPROCESS_CMDS": ["php app/htdocs/index.php migrations"]
 }

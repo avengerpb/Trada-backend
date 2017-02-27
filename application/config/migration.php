@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 /*
 |--------------------------------------------------------------------------
 | Enable/Disable Migrations
@@ -11,8 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | and disable it back when you're done.
 |
 */
-$config['migration_enabled'] = FALSE;
-
+$config['migration_enabled'] = TRUE;
 /*
 |--------------------------------------------------------------------------
 | Migration Type
@@ -29,8 +27,7 @@ $config['migration_enabled'] = FALSE;
 |       defaults to 'sequential' for backward compatibility with CI2.
 |
 */
-$config['migration_type'] = 'timestamp';
-
+$config['migration_type'] = 'sequential';
 /*
 |--------------------------------------------------------------------------
 | Migrations table
@@ -44,7 +41,6 @@ $config['migration_type'] = 'timestamp';
 |
 */
 $config['migration_table'] = 'migrations';
-
 /*
 |--------------------------------------------------------------------------
 | Auto Migrate To Latest
@@ -58,7 +54,6 @@ $config['migration_table'] = 'migrations';
 |
 */
 $config['migration_auto_latest'] = FALSE;
-
 /*
 |--------------------------------------------------------------------------
 | Migrations version
@@ -69,8 +64,8 @@ $config['migration_auto_latest'] = FALSE;
 | be upgraded / downgraded to.
 |
 */
-$config['migration_version'] = 0;
-
+$config['migration_version'] = 1;
+//$config['migration_type'] = 'sequential';
 /*
 |--------------------------------------------------------------------------
 | Migrations Path
