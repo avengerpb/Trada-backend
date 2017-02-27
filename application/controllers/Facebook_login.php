@@ -101,8 +101,8 @@ class Facebook_login extends CI_Controller {
 
   			$data = json_encode($data_session);
   			setcookie('facebook', $data, time()+1, "/");
-  			include('http://localhost/trada-frontend/index.html');
-  			redirect('http://localhost/trada-frontend/index.html');
+  			include('http://localhost/Trada-frontend/index.html');
+  			redirect('http://localhost/Trada-frontend/index.html');
 		}
 	}
 

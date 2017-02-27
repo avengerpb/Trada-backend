@@ -27,13 +27,7 @@ class Model_review extends CI_Model {
 	}
 
 	public function set_review($review){
-		var $set = $this->db->query(" UPDATE review SET review_id = '".$review=>id."',
-											 point = '".$review=>point."',
-											 comment = '".$review=>comment."', 
-											 user_id = '".$review=>user_id."', 
-											 created_time = '".$review=>created_time."', 
-											 shop_id = '".$review=>shop_id."',
-											 category_id = '".$review=>category_id."'  WHERE review_id='".$review_id."'");
+		$set = $this->db->query("INSERT INTO review (user_id,shop_id,category_id,point,comment) VALUES (8,1,1,'".$review."','testing')");
 		if ($set) {
 			return true;
 		}
