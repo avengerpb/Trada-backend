@@ -8,7 +8,7 @@
 	}
 </style>
 
-<ul>
+<ul id="sortlist">
 	<?php 
 	  	$this->load->module('store_categories');
 	  	foreach ($query->result() as $row) {
@@ -20,7 +20,7 @@
 	  			$group_category = $this->store_categories->_get_category_name($row->group_cate_id);
 	  		}
 	?>
-	<li class="sort"><i class="icon-sort"></i> <?=	$row->category_name ?>
+	<li class="sort" id="<?= $row->category_id ?>"><i class="icon-sort"></i> <?=	$row->category_name ?>
 		<?= $group_category ?>
 
 		<?php 

@@ -21,9 +21,31 @@ function manage()
 
     $post_data = $this->fetch_data_from_post();
     $item_id = $this->mdl_store_items->get_item_id_by_item_name($post_data['item_name']);
-    $data['query'] = $this->get($item_id);
-    $data['view_file'] = 'manage';    
-    $this->templates->admin($data);
+    $query = $this->get($item_id);
+    $row = $query->result();
+    echo json_encode($row);
+
+    // if (isset($row)) {
+    //     $data['edit_item_image_url'] = base_url().'index.php/store_items/create/'.$row['item_id'];
+    //     $data['item_id'] = $row['item_id'];
+    //     $data['shop_id'] = $row['shop_id'];
+    //     $data['item_name'] = $row['item_name'];
+    //     $data['price'] = $row['price'];
+    //     $data['item_image_url'] = $row['item_image_url'];
+    // }
+
+
+    // foreach ($query->result() as $row) {
+    //     $data['edit_item_image_url'] = base_url().'index.php/store_items/create/'.$row->item_id;
+    //     $data['item_id'] = $row->item_id;
+    //     $data['shop_id'] = $row->shop_id;
+    //     $data['item_name'] = $row->item_name;
+    //     $data['price'] = $row->price;
+    //     $data['item_image_url'] = $row->item_image_url;
+    // }
+
+    // $data['view_file'] = 'manage';    
+    // $this->templates->admin($data);
 }
 
 function view($update_id)
@@ -243,6 +265,7 @@ function fetch_data_from_post()
     $data['item_id'] = $this->input->post('item_id', true);
     $data['item_name'] = $this->input->post('item_name', true);
     $data['price'] = $this->input->post('price', true);
+    $data['item_description'] = $this->input->post('item_description', true);
     return $data;
 }
 
@@ -257,6 +280,7 @@ function fetch_data_from_db($update_id)
         $data['item_id'] = $row->item_id;
         $data['item_name'] = $row->item_name;
         $data['price'] = $row->price;
+        $data['item_description'] = $row->item_description;
         $data['item_image_url'] = $row->item_image_url;
     }
 

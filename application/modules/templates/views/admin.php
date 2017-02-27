@@ -43,6 +43,12 @@
 </head>
 
 <body>
+	<?php 
+		if (isset($sort_this)) {
+			require_once('sort_this_code.php');
+		}
+	?>
+
 		<!-- start: Header -->
 	<div class="navbar">
 		<div class="navbar-inner">

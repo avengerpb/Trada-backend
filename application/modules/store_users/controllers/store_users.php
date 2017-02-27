@@ -60,10 +60,13 @@ function manage_users()
 
     $data['flash'] = $this->session->flashdata('user');
 
-    $data['query'] = $this->get('user_id');
-    $data['view_file'] = 'manage_users';    
-    $this->load->module('templates');
-    $this->templates->admin($data);
+    $query = $this->get('user_id');
+    $row = $query->result();
+    
+    // $data['query'] = $this->get('user_id');
+    // $data['view_file'] = 'manage_users';    
+    // $this->load->module('templates');
+    // $this->templates->admin($data);
 }
 
 function create_users()

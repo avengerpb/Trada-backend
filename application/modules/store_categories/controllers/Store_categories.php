@@ -9,9 +9,42 @@ function __construct() {
     $this->load->model('mdl_store_categories');
 }
 
+/*
+function _get_all_sub_cates_for_dropdown()
+{
+    // get used on store_cate_item
+    $mysql_query = "SELECT * FROM `category` WHERE `group_cate_id` != 0  ORDER BY `group_cate_id`, `category_name`";
+    $query = $this->_custom_query($mysql_query);
+    foreach ($query->result() as $row) {
+        $group_cate_name = $this->_get_category_name($row->group_cate_id);
+        $sub_categories[$row->category_id] = $group_cate_id." > ".$row->category_name;
+    }
+
+    if (!isset($sub_categories)) {
+        $sub_categories = '';
+    }
+
+    return $sub_categories;
+}
+*/
+
+function sort()
+{
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    $number = $this->input->post('number', true);
+    for ($i=1; $i <= $number ; $i++) { 
+        $update_id = $_POST['order'.$i];
+        $data['priority'] = $i;
+        $this->_update($update_id, $data);
+    }
+}
+
 function _draw_sortable_list($group_cate_id)
 {
-    $data['query'] = $this->get_where_custom('group_cate_id', $group_cate_id);
+    $mysql_query = "SELECT * FROM `category` WHERE `group_cate_id` = $group_cate_id ORDER BY `priority`";
+    $data['query'] = $this->_custom_query($mysql_query);
     $this->load->view('sortable_list', $data);
 }
 
@@ -110,6 +143,7 @@ function manage()
     $data['flash'] = $this->session->flashdata('category');
 
     $post_data = $this->fetch_data_from_post();
+    $data['sort_this'] = true;
     $data['group_cate_id'] = $group_cate_id;
     $data['query'] = $this->get_where_custom('group_cate_id', $group_cate_id);
     $data['view_file'] = 'manage';    
@@ -145,6 +179,7 @@ function fetch_data_from_post()
 {
     $data['category_name'] = $this->input->post('category_name', true);
     $data['group_cate_id'] = $this->input->post('group_cate_id', true);
+    $data['category_description'] = $this->input->post('category_description', true);
     return $data;
 }
 
@@ -159,6 +194,7 @@ function fetch_data_from_db($update_id)
         $data['category_id'] = $row->category_id;
         $data['category_name'] = $row->category_name;
         $data['group_cate_id'] = $row->group_cate_id;
+        $data['category_description'] = $row->category_description;
     }
 
     if (!isset($data)) {
