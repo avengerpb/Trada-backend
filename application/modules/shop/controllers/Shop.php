@@ -28,6 +28,8 @@ function create()
     // } else {
         //insert a new shop
         if ($this->_insert($data)){
+            $shop_id = $this->mdl_shop->get_shop_id($_POST['shop_name']);
+            $this->mdl_shop->shop_user_insert($shop_id);
             $status = "success";
         } else{
             $status = "failes";
