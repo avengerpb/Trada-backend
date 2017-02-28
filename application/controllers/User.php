@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * 
  * @extends CI_Controller
  */
-class User extends CI_Controller {
+class User extends MX_Controller {
 
 	/**
 	 * __construct function.
@@ -336,10 +336,11 @@ public function reset_password_validation(){
 	}
 
 	public function get_all_shop_from_user(){
-		$user_id = $_POST('user_id');
-		$this->load->modules('shop');
+		$user_id = $_POST['user_id'];
+		$this->load->module('shop');
 		$result = $this->shop->get_all_shop_from_user($user_id);
-		echo json_decode($result);
+		/*$result = Modules::run('shop/get_all_shop_from_user', $user_id);*/
+		echo json_encode($result);
 	}
 
 }

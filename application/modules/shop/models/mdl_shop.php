@@ -88,7 +88,8 @@ function _custom_query($mysql_query) {
 }
 
 function get_all_shop_from_user($user_id){
-    $query = $this->db->query('SELECT * FROM user_shop INNER JOIN shop where user_shop.user_id ='.$user_id);
+    $query = $this->db->query('SELECT * FROM user_shop INNER JOIN shop on user_shop.shop_id = shop.shop_id');
+    $this->db->where('user_id', $user_id);
     $result = $query->result();
     return $result;
 }

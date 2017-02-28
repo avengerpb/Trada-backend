@@ -15,7 +15,7 @@ function get($order_by){
     $table = $this->get_table();
     $this->db->order_by($order_by);
     $query=$this->db->get($table);
-    return $query;
+    return $query->result();
 }
 
 function get_item_id_by_item_name($item_name) {
