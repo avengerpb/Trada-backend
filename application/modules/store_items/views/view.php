@@ -4,9 +4,9 @@
   </div>
   <div class="col-md-5">
   	<h1><?= $item_name ?></h1>
-  	<div style="clear: both">
-  		<!-- <?= nl2br($category_description) ?> -->
-  		lkadsjf
+
+  		<?= nl2br($item_description) ?>
+
   	</div>
   </div>
   <div class="col-md-3">

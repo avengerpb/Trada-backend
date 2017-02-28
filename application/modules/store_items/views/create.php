@@ -26,7 +26,8 @@
 				<a href="<?= base_url() ?>index.php/store_items/delete_image/<?= $update_id ?>"><button type="button" class="btn btn-danger">Delete Item Image</button></a>
 			<?php } ?>
 
-			<a href=""><button type="button" class="btn btn-primary">Update Item Categories</button></a>
+
+			<a href="<?= base_url() ?>index.php/store_cate_item/update/<?= $update_id ?>"><button type="button" class="btn btn-primary">Update Item Categories</button></a>
 			<a href="<?= base_url() ?>index.php/store_items/deleteconf/<?= $update_id ?>"><button type="button" class="btn btn-danger">Delete Item</button></a>
 			<a href="<?= base_url() ?>index.php/store_items/view/<?= $update_id ?>"><button type="button" class="btn btn-default">View Item In Shop</button></a>
 		</div>
@@ -73,12 +74,21 @@
 							  </div>
 						</div>
 								        
+<<<<<<< HEAD
 								<!-- <div class="control-group hidden-phone">
 								  <label class="control-label" for="textarea2">Item Description</label>
 								  <div class="controls">
 									<textarea class="cleditor" id="textarea2" rows="3"></textarea>
 								  </div>
 								</div> -->
+=======
+						<div class="control-group hidden-phone">
+						  <label class="control-label" for="textarea2">Item Description</label>
+						  <div class="controls">
+							<textarea class="cleditor" id="textarea2" rows="3" name="item_description"><?php echo $item_description; ?></textarea>
+						  </div>
+						</div>
+>>>>>>> item
 
 						<div class="form-actions">
 						  <button type="submit" class="btn btn-primary" name="submit" value="Submit">Save changes</button>
@@ -86,6 +96,7 @@
 						</div>
 					  </fieldset>
 					</form>   
+<<<<<<< HEAD
 
 			</div>
 		</div><!--/span-->
@@ -93,6 +104,15 @@
 </div><!--/row-->
 
 
+=======
+
+			</div>
+		</div><!--/span-->
+
+</div><!--/row-->
+
+
+>>>>>>> item
 <?php 
 	if ($item_image_url != '') {
 ?>

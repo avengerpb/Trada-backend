@@ -16,7 +16,9 @@
 					<div class="box-header" data-original-title>
 						<h2><i class="halflings-icon white briefcase"></i><span class="break"></span>Customers Users</h2>
 						<div class="box-icon">
+
 							<a href="#" class="btn-setting"><i class="halflings-icon white wrench"></i></a>
+
 							<a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
 							<a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a>
 						</div>
@@ -42,7 +44,12 @@
 
 						  <?php 
 						  	foreach ($query->result() as $row) {
+<<<<<<< HEAD
 						  		$edit_user_image_url = base_url().'index.php/store_users/create_users/'.$row->user_id;
+=======
+						  		$delete_user_url = base_url().'index.php/store_users/delete_user/'.$row->user_id;
+						  		$view_user_url = base_url().'index.php/store_users/view_user/'.$row->user_id;
+>>>>>>> item
 						  ?>
 
 							<tr>
@@ -58,6 +65,7 @@
 								<td class="center"><?= $row->location ?></td>
 								<td class="center"><?= $row->user_image_url ?></td>
 								
+<<<<<<< HEAD
 								<!-- <td class="center">
 									<a class="btn btn-success" href="#">
 										<i class="halflings-icon white zoom-in"></i>  
@@ -67,6 +75,17 @@
 									</a>
 									
 								</td> -->
+=======
+								<td class="center">
+									<!-- <a class="btn btn-success" href="#">
+										<i class="halflings-icon white zoom-in"></i>  
+									</a> -->
+									<a class="btn btn-info" href="<?= $delete_user_url ?>">
+										<i class="halflings-icon white trash"></i>  
+									</a>
+									
+								</td>
+>>>>>>> item
 							</tr>
 
 							<?php } ?>

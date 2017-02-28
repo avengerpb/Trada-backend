@@ -45,6 +45,7 @@ class User extends CI_Controller {
 	 */
 	public function signup() {
 		$data = new stdClass();
+
 		$data = array( 'user_name' => '', 'password' => '', 'email' => '', 'status' => '');
 		$this->load->model('model_users');
 		$user_name = $_POST['user_name'];
@@ -69,6 +70,7 @@ class User extends CI_Controller {
 				$data['password'] = 'mismatch';
 			}
 		}
+
 
 		if($data['status'] != '' || $data['user_name'] != '' || $data['email'] != '' || $data['password'] != ''){
 			echo json_encode($data);
