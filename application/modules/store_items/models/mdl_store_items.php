@@ -72,6 +72,11 @@ function _insert($data){
     $this->db->insert($table, $data);
 }
 
+function _insert2($data){
+    $table = 'category_item';
+    $this->db->insert($table, $data);
+}
+
 function _update($item_id, $data){
     $table = $this->get_table();
     $this->db->where('item_id', $item_id);

@@ -28,6 +28,26 @@ function _get_all_sub_cates_for_dropdown()
 }
 */
 
+function _draw_top_nav()
+{
+    $mysql_query = "SELECT * FROM `category` WHERE `group_cate_id` = 0 ORDER BY `priority`";
+    $query = $this->_custom_query($mysql_query);
+    foreach ($query->result() as $row) {
+        $group_cate[$row->category_id] = $row->category_name;
+    }
+
+    $data['group_cate'] = $group_cate;
+    $this->load->view('top_nav', $data);
+}
+
+function _get_group_cate_name($update_id)
+{
+    $data = $this->fetch_data_from_db($update_id);
+    $group_cate_id = $data['group_cate_id'];
+    $group_cate_name = $this->_get_category_name($group_cate_id);
+    return $group_cate_name;
+}
+
 function sort()
 {
     $this->load->module('site_security');

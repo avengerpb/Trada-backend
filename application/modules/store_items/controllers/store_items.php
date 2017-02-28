@@ -12,6 +12,20 @@ function __construct() {
     $this->form_validation->CI =& $this;
 }
 
+function _get_item_id_from_item_url($item_url)
+{
+    $query = $this->get_where_custom('item_url', $item_url);
+    foreach ($query->result() as $row) {
+        $item_id = $row->item_id;
+    }
+
+    if (!isset($item_id)) {
+        $item_id = 0;
+    }
+
+    return $item_id;
+}
+
 function manage()
 {
     $this->load->module('site_security');
@@ -21,9 +35,9 @@ function manage()
 
     $post_data = $this->fetch_data_from_post();
     $item_id = $this->mdl_store_items->get_item_id_by_item_name($post_data['item_name']);
-    $query = $this->get($item_id);
-    $row = $query->result();
-    echo json_encode($row);
+    $data['query'] = $this->get($item_id);
+    // $row = $query->result();
+    // echo json_encode($row);
 
     // if (isset($row)) {
     //     $data['edit_item_image_url'] = base_url().'index.php/store_items/create/'.$row['item_id'];
@@ -44,8 +58,8 @@ function manage()
     //     $data['item_image_url'] = $row->item_image_url;
     // }
 
-    // $data['view_file'] = 'manage';    
-    // $this->templates->admin($data);
+    $data['view_file'] = 'manage';    
+    $this->templates->admin($data);
 }
 
 function view($update_id)
@@ -59,6 +73,7 @@ function view($update_id)
 
     $data['update_id'] = $update_id;
     $data['flash'] = $this->session->flashdata('item');
+    $data['view_module'] = 'store_items';
     $data['view_file'] = 'view';
     $this->templates->public_bootstrap($data);
 }
@@ -92,6 +107,9 @@ function create()
                 //insert a new item
                 $this->_insert($data);
                 $update_id = $this->get_max(); //get the ID of the new item
+                $this->load->database('item');
+                $data2 = array('item_id' => $this->db->insert_id(), );
+                $this->_insert2($data2);
 
                 $flash_msg = 'The item was successfully added !';
                 $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
@@ -326,6 +344,11 @@ function get_where_custom($col, $value)
 function _insert($data)
 {    
     $this->mdl_store_items->_insert($data);
+}
+
+function _insert2($data)
+{    
+    $this->mdl_store_items->_insert2($data);
 }
 
 function _update($item_id, $data)
