@@ -36,24 +36,23 @@
 
 						  <?php 
 						  	foreach ($query->result() as $row) {
-						  		$edit_shop_url = base_url().'index.php/shop/create/'.$row->item_id;
+						  		$edit_shop_url = base_url().'index.php/shop/create/'.$row->shop_id;
 						  		// $view_shop_url = base_url().'index.php/shop/view/'.$row->item_id;
 						  ?>
 
 							<tr>
-								<td><?= $row->item_id ?></td>
-								<td class="center"><?= $row->shop_id ?></td>
-								<td class="center"><?= $row->item_name ?></td>
-								<td class="center"><?= $row->price ?></td>
-								<td class="center"><?= $row->item_image_url ?></td>
+								<td><?= $row->shop_name ?></td>
+								<td class="center"><?= $row->address ?></td>
+								<td class="center"><?= $row->fb_link ?></td>
+								<td class="center"><?= $row->shop_image_url ?></td>
 								<!-- <td class="center">
 									<span class="label label-success">Active</span>
 								</td> -->
 								<td class="center">
 									<a class="btn btn-success" href="#">
-										<i class="halflings-icon white zoom-in"></i>  
+										<i class="halflings-icon white eye-open"></i>  
 									</a>
-									<a class="btn btn-info" href="<?= $edit_item_image_url ?>">
+									<a class="btn btn-info" href="<?= $edit_shop_url ?>">
 										<i class="halflings-icon white edit"></i>  
 									</a>
 									

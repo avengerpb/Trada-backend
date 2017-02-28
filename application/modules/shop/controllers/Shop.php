@@ -9,6 +9,45 @@ function __construct() {
     $this->load->model('mdl_shop');
 }
 
+function delete($update_id)
+{
+    if (!is_numeric($update_id)) {
+        redirect('index.php/site_security/not_allowed');
+    }
+
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    $submit = $this->input->post('submit', true);
+    if ($submit == 'Yes - Delete Shop') {
+        $this->_delete($update_id);
+
+        $flash_msg = 'The shop was successfully deleted !';
+        $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+        $this->session->set_flashdata('shop', $value);
+
+        redirect('index.php/shop/manage');
+    } elseif ($submit == 'Cancel') {
+        redirect('index.php/shop/create/'.$update_id);
+    }
+}
+
+function deleteconf($update_id)
+{
+    if (!is_numeric($update_id)) {
+        redirect('index.php/site_security/not_allowed');
+    }
+
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_is_admin();
+
+    $data['headline'] = 'Delete Shop';
+    $data['update_id'] = $update_id;
+    $data['flash'] = $this->session->flashdata('shop');
+    $data['view_file'] = 'deleteconf';
+    $this->templates->admin($data);
+}
+
 function create()
 {
     $this->site_security->_make_sure_is_admin();
