@@ -337,8 +337,9 @@ public function reset_password_validation(){
 
 	public function get_all_shop_from_user(){
 		$user_id = $_POST('user_id');
-		$this->load->modules('shop');
-		$result = $this->shop->get_all_shop_from_user($user_id);
+		// $this->load->module('shop');
+		// $result = $this->shop->get_all_shop_from_user($user_id);
+		Modules::run('shop/get_all_shop_from_user',$user_id);
 		echo json_decode($result);
 	}
 
