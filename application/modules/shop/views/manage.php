@@ -36,7 +36,8 @@
 
 						  <?php 
 						  	foreach ($query->result() as $row) {
-						  		$edit_item_image_url = base_url().'index.php/store_items/create/'.$row->item_id;
+						  		$edit_shop_url = base_url().'index.php/shop/create/'.$row->item_id;
+						  		// $view_shop_url = base_url().'index.php/shop/view/'.$row->item_id;
 						  ?>
 
 							<tr>

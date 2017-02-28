@@ -38,9 +38,6 @@ function create()
                 //insert a new shop
                 $this->_insert($data);
                 $update_id = $this->get_max(); //get the ID of the new shop
-                $this->load->database('shop');
-                $data2 = array('shop_id' => $this->db->insert_id(), );
-                $this->_insert2($data2);
 
                 $flash_msg = 'The shop was successfully created !';
                 $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
