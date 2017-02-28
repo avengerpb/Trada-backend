@@ -42,7 +42,8 @@ function get_where_custom($col, $value) {
 
 function _insert($data){
     $table = $this->get_table();
-    $this->db->insert($table, $data);
+    if($this->db->insert($table, $data))
+        return true;
 }
 
 function _update($shop_id, $data){
@@ -86,4 +87,9 @@ function _custom_query($mysql_query) {
     return $query;
 }
 
+function get_all_shop_from_user($user_id){
+    $query = $this->db->query('SELECT * FROM user_shop INNER JOIN shop where user_shop.user_id ='.$user_id);
+    $result = $query->result();
+    return $result;
+}
 }

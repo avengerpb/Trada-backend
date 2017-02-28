@@ -60,13 +60,10 @@ function manage_users()
 
     $data['flash'] = $this->session->flashdata('user');
 
-    $query = $this->get('user_id');
-    $row = $query->result();
-    
-    // $data['query'] = $this->get('user_id');
-    // $data['view_file'] = 'manage_users';    
-    // $this->load->module('templates');
-    // $this->templates->admin($data);
+    $data['query'] = $this->get('user_id');
+    $data['view_file'] = 'manage_users';    
+    $this->load->module('templates');
+    $this->templates->admin($data);
 }
 
 function create_users()
@@ -111,7 +108,7 @@ function create_users()
                 $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
 
                 $this->session->set_flashdata('user', $value);
-                redirect('index.php/store_users/manage_users/');
+                redirect('index.php/store_users/create_users/'.$update_id);
             }
             
         }

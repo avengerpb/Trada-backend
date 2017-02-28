@@ -11,63 +11,49 @@ function __construct() {
 
 function create()
 {
-    $this->site_security->_make_sure_is_admin();
-    $submit = $this->input->post('submit',true);
-    $update_id = $this->uri->segment(3);
-    // $shop_image_url = $this->mdl_shop->get_shop_image_url($update_id);
 
-    if ($submit == 'Submit') {
-        // $this->form_validation->set_rules('shop_id', 'Shop ID', 'required');
-        $this->form_validation->set_rules('shop_name', 'Shop Name', 'required|max_length[250]');
-        $this->form_validation->set_rules('address', 'Address', 'required');
+    $data['shop_name'] = $_POST['shop_name'];
+    $data['address'] = $_POST['address'];
+    $data['fb_link'] = $_POST['fb_link'];
+    // $data['shop_url'] = url_title($data['shop_name']);
 
-        if ($this->form_validation->run() == true) {
-            //get the variables
-            $data = $this->fetch_data_from_post();
-            // $data['shop_url'] = url_title($data['shop_name']);
-
-            if (is_numeric($update_id)) {
+    // if (is_numeric($update_id)) {
                 //update the shop details
-                $this->_update($update_id, $data);
-                $flash_msg = 'The shop details were successfully updated !';
-                $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+        // $this->_update($update_id, $data);
+        // $flash_msg = 'The shop details were successfully updated !';
+        // $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
 
-                $this->session->set_flashdata('shop', $value);
-                redirect('index.php/shop/create/'.$update_id);
-            } else {
-                //insert a new shop
-                $this->_insert($data);
-                $update_id = $this->get_max(); //get the ID of the new shop
-
-                $flash_msg = 'The shop was successfully created !';
-                $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
-
-                $this->session->set_flashdata('shop', $value);
-                redirect('index.php/shop/create/'.$update_id);
-            }
-            
+        // $this->session->set_flashdata('shop', $value);
+        // redirect('index.php/shop/create/'.$update_id);
+    // } else {
+        //insert a new shop
+        if ($this->_insert($data)){
+            $status = "success";
+        } else{
+            $status = "failes";
         }
-    } elseif ($submit == 'Cancel') {
-        redirect('index.php/shop/manage');
-    }
 
-    if ((is_numeric($update_id)) && ($submit != 'Submit')) {
-        $data = $this->fetch_data_from_db($update_id);
-    } else {
-        $data = $this->fetch_data_from_post();
-    }
+        echo json_encode($status);
+        // $update_id = $this->get_max(); //get the ID of the new shop
 
-    if (!is_numeric($update_id)) {
-        $data['headline'] = 'Create New shop';
-    } else {
-        $data['headline'] = 'Update Shop Details';
-    }
+        // $flash_msg = 'The shop was successfully created !';
+        // $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+
+        // $this->session->set_flashdata('shop', $value);
+        // redirect('index.php/shop/create/'.$update_id);
+    // }
+
+    // if (!is_numeric($update_id)) {
+    //     $data['headline'] = 'Create New shop';
+    // } else {
+    //     $data['headline'] = 'Update Shop Details';
+    // }
 
     // $data['shop_image_url'] = $shop_image_url;
-    $data['update_id'] = $update_id;
-    $data['flash'] = $this->session->flashdata('shop');
-    $data['view_file'] = 'create';
-    $this->templates->admin($data);
+    // $data['update_id'] = $update_id;
+    // $data['flash'] = $this->session->flashdata('shop');
+    // $data['view_file'] = 'create';
+    // $this->templates->admin($data);
 }
 
 function manage()
@@ -106,13 +92,13 @@ function manage()
     $this->templates->admin($data);
 }
 
-function fetch_data_from_post()
-{
-    $data['shop_id'] = $this->input->post('shop_id', true);
-    $data['shop_name'] = $this->input->post('shop_name', true);
-    $data['address'] = $this->input->post('address', true);
-    return $data;
-}
+// function fetch_data_from_post()
+// {
+//     $data['shop_id'] = $this->input->post('shop_id', true);
+//     $data['shop_name'] = $this->input->post('shop_name', true);
+//     $data['address'] = $this->input->post('address', true);
+//     return $data;
+// }
 
 function fetch_data_from_db($update_id)
 {
@@ -175,7 +161,8 @@ function get_where_custom($col, $value)
 function _insert($data)
 {
     $this->load->model('mdl_shop');
-    $this->mdl_shop->_insert($data);
+    if($this->mdl_shop->_insert($data))
+        return true;
 }
 
 function _update($shop_id, $data)
@@ -240,6 +227,10 @@ function shop_check($str)
     } else {
         return true;
     }
+}
+
+function get_all_shop_from_user($user_id){
+    return $this->mdl_shop->get_all_shop_from_user($user_id);
 }
 
 }
