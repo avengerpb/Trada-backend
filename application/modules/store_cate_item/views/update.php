@@ -31,7 +31,7 @@
 						  	<div class="controls">
 								<?php 
 									$additional_dd_code = 'id="selectError3"';
-									echo form_dropdown('group_cate_id', $options, $group_cate_id, $additional_dd_code);
+									echo form_dropdown('category_id', $options, $category_id, $additional_dd_code);
 								?>
 						  	</div>
 						</div>	

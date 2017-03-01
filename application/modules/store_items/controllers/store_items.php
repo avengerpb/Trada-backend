@@ -88,6 +88,7 @@ function create()
     $post_data = $this->store_categories->fetch_data_from_post();
     $category_id = $this->store_categories->get_category_id_by_category_name($post_data['category_name']);
 
+
     if ($submit == 'Submit') {
         // $this->form_validation->set_rules('item_id', 'Item ID', 'required');
         $this->form_validation->set_rules('item_name', 'Item Name', 'required|max_length[240]|callback_item_check');
@@ -113,6 +114,7 @@ function create()
                 $update_id = $this->get_max(); //get the ID of the new item
 
                 $this->db->query("INSERT INTO `category_item`(`category_id`, `item_id`) VALUES ($cate_id,$update_id)");
+                $this->db->query("INSERT INTO `item_shop`(`shop_id`, `item_id`) VALUES (1, $update_id)");
 
                 $flash_msg = 'The item was successfully added !';
                 $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
@@ -258,6 +260,7 @@ function delete($update_id)
     $submit = $this->input->post('submit', true);
     if ($submit == 'Yes - Delete Item') {
         $this->_delete($update_id);
+        // $this->db->query("DELETE * FROM `category_item` WHERE `item_id` = $update_id");
 
         $flash_msg = 'The item was successfully deleted !';
         $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
