@@ -17,13 +17,14 @@ function manage()
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
 
-    $data['flash'] = $this->session->flashdata('item');
+    /*$data['flash'] = $this->session->flashdata('item');*/
 
     $post_data = $this->fetch_data_from_post();
     $item_id = $this->mdl_store_items->get_item_id_by_item_name($post_data['item_name']);
-    $data['query'] = $this->get($item_id);
-    $data['view_file'] = 'manage';    
-    $this->templates->admin($data);
+    $data = $this->get($item_id);
+    echo json_encode($data);
+    /*$data['view_file'] = 'manage';    
+    $this->templates->admin($data);*/
 }
 
 function view($update_id)
