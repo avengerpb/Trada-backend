@@ -98,7 +98,7 @@ function get_shop_id($shop_name){
     $this->db->where('shop_name', $shop_name);
     $query = $this->db->get('shop');
     $row=$query->row();
-    $shop_id=$row->id;
+    $shop_id=$row->shop_id;
     return $shop_id;
 }
 

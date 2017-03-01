@@ -245,6 +245,7 @@ public function reset_password_validation(){
 			// $user_name = $this->model_users->get_info($_POST['user_name']);
 			$res = $this->model_users->get_profile($_POST['user_name']);
 			$data = array (
+				'user_id' => $res->user_id,
 				'user_name' => $res->user_name,
 				'email' => $res->email,
 				'full_name' => $res->full_name,

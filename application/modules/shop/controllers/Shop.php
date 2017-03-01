@@ -11,7 +11,6 @@ function __construct() {
 
 function create()
 {
-
     $data['shop_name'] = $_POST['shop_name'];
     $data['address'] = $_POST['address'];
     $data['fb_link'] = $_POST['fb_link'];
