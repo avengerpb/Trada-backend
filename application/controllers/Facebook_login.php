@@ -155,7 +155,8 @@ class Facebook_login extends CI_Controller {
   			'cover' => json_decode($graphNode['cover'])->source,
   			'photos' => json_decode($graphNode['photos'])
 		);
-  			
+  		$this->load->module('shop');
+  		$this->shop->add_fb_picture_url(json_decode($graphNode['picture'])->url, $_POST['shop_name']);
 		/*print_r(json_decode($graphNode['cover'])->source);
 		echo "<br>";
 		foreach (json_decode($graphNode['photos']) as $image){

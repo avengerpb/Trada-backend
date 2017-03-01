@@ -48,6 +48,10 @@ function deleteconf($update_id)
     $this->templates->admin($data);
 }
 
+function add_fb_picture_url($shop_image_url, $shop_name){
+    $this->mdl_shop->add_fb_picture_url($shop_image_url, $shop_name);
+}
+
 function create()
 {
     $data['shop_name'] = $_POST['shop_name'];
