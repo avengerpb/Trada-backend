@@ -77,15 +77,6 @@ class Facebook_login extends CI_Controller {
 			$graphNode = $response->getGraphNode();
 			/* handle the result */
   	// 		$message = 'User name: ' . $graphNode['name'];
-  			$data_session = array (
-  				//'birthday' => $graphNode['birthday'],
-  				'email' => $graphNode['email'],
-				'user_name' => $graphNode['id'],
-				'full_name' => $graphNode['name'],
-				'is_logged_in' => 1,
-				'user_image_url' => json_decode($graphNode['picture'])->url
-			);
-  			$this->session->set_userdata($data_session);
 			$data_dtb = array (
   				'user_name' => $graphNode['id'],
   				//'birthday' => $graphNode['birthday'],
@@ -96,9 +87,24 @@ class Facebook_login extends CI_Controller {
 				'location' => $graphNode['location'],
 				'user_image_url' => json_decode($graphNode['picture'])->url
 			);
+
+			$res = $this->model_users->get_profile($graphNode['id']);
+			$user_id = $res->user_id;
+
 			$this->load->model('model_users');
 			$this->model_users->add_fb_user($graphNode['id'], $data_dtb);
 
+  			$data_session = array (
+  				//'birthday' => $graphNode['birthday'],
+  				'user_id' => $user_id,
+  				'email' => $graphNode['email'],
+				'user_name' => $graphNode['id'],
+				'full_name' => $graphNode['name'],
+				'is_logged_in' => 1,
+				'user_image_url' => json_decode($graphNode['picture'])->url
+			);
+  			$this->session->set_userdata($data_session);
+			
   			$data = json_encode($data_session);
   			setcookie('facebook', $data, time()+1, "/");
   			include('http://localhost/Trada-frontend/index.html');
@@ -108,7 +114,7 @@ class Facebook_login extends CI_Controller {
 
 
 	public function add_page_shop(){
-		$link = 'https://www.facebook.com/duonggodfanclub/?notif_t=page_user_activity&notif_id=1487652095742563';
+		$link = $_POST['fb_link'];
 		preg_match('/(?:http:\/\/)?(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-]*)/',
 		    $link, $matches);
 
