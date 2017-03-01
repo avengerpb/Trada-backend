@@ -26,8 +26,6 @@
 				<a href="<?= base_url() ?>index.php/store_items/delete_image/<?= $update_id ?>"><button type="button" class="btn btn-danger">Delete Item Image</button></a>
 			<?php } ?>
 
-
-			<a href="<?= base_url() ?>index.php/store_cate_item/update/<?= $update_id ?>"><button type="button" class="btn btn-primary">Update Item Categories</button></a>
 			<a href="<?= base_url() ?>index.php/store_items/deleteconf/<?= $update_id ?>"><button type="button" class="btn btn-danger">Delete Item</button></a>
 			<a href="<?= base_url() ?>index.php/store_items/view/<?= $update_id ?>"><button type="button" class="btn btn-default">View Item In Shop</button></a>
 		</div>
@@ -59,6 +57,25 @@
 							<input type="text" class="span6" name="item_name" value="<?= $item_name ?>">
 						  </div>
 						</div>
+
+						<?php 
+							if (!is_numeric($update_id)) {
+								if ($num_dropdown_options > 1) {
+					  	?>
+					  	<div class="control-group">
+							<label class="control-label" for="typeahead">Group Category </label>
+						  	<div class="controls">
+								<?php 
+									$additional_dd_code = 'id="selectError3"';
+									echo form_dropdown('category_id', $options, $category_id, $additional_dd_code);
+								?>
+						  	</div>
+						</div>	
+						<?php } else {
+								echo form_hidden('category_id', 0);
+							}
+						}
+						?>
 
 								<!-- <div class="control-group">
 								  <label class="control-label" for="typeahead">Item ID </label>

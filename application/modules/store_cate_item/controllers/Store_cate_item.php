@@ -68,8 +68,7 @@ function update($item_id)
 
 
     // get array of all categories
-    $this->load->module('store_categories');
-    $query = $this->store_categories->get_where_custom('group_cate_id =', '0');
+    $query = $this->db->query("SELECT * FROM `category`");
     foreach ($query->result() as $row) {
         $categories[$row->category_id] = $row->category_name;
     }
@@ -80,16 +79,12 @@ function update($item_id)
     $data['num_rows'] = $query->num_rows();
     foreach ($query->result() as $row) {
         $category_name = $this->store_categories->_get_category_name($row->category_id);
-        $group_cate_name = $this->store_categories->_get_group_cate_name($row->category_id);
-        $assigned_categories[$row->category_id] = $group_cate_name." > ".$category_name;
+        // $group_cate_name = $this->store_categories->_get_group_cate_name($row->category_id);
+        // $assigned_categories[$row->category_id] = $group_cate_name." > ".$category_name;
     }
 
-    if (!isset($assigned_categories)) {
-        $assigned_categories = '';
-    } else {
-        // the item has been assigned to at least one category
-        $categories = array_diff($categories, $assigned_categories);
-    }
+    // the item has been assigned to at least one category
+    $categories = array_diff($categories, $assigned_categories);
 
     $data['options'] = $categories;
     $data['group_cate_id'] = $this->input->post('group_cate_id', true);

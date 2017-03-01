@@ -12,32 +12,28 @@
 	<?php 
 	  	$this->load->module('store_categories');
 	  	foreach ($query->result() as $row) {
-	  		$num_sub_cates = $this->store_categories->_count_sub_cates($row->category_id);
+	  		$num_items = $this->store_categories->_count_items($row->category_id);
 	  		$edit_category_url = base_url().'index.php/store_categories/create/'.$row->category_id;
-	  		if ($row->group_cate_id == 0) {
-	  			$group_category = '&nbsp;';
-	  		} else {
-	  			$group_category = $this->store_categories->_get_category_name($row->group_cate_id);
-	  		}
+	  		// $group_category = $this->store_categories->_get_category_name($row->category_id);
+
 	?>
-	<li class="sort" id="<?= $row->category_id ?>"><i class="icon-sort"></i> <?=	$row->category_name ?>
-		<?= $group_category ?>
+	<li class="sort" id="<?= $row->category_id ?>"><i class="icon-sort"></i> <?= $row->category_name ?>
 
 		<?php 
-			if ($num_sub_cates < 1) {
+			if ($num_items < 1) {
 				echo '&nbsp;';
 			} else {
-				if ($num_sub_cates == 1) {
-					$entity = 'Category';
+				if ($num_items == 1) {
+					$entity = 'Item';
 				} else {
-					$entity = 'Categories';
+					$entity = 'Items';
 				}
-				$sub_cate_url = base_url().'index.php/store_categories/manage/'.$row->category_id;
+				$item_url = base_url().'index.php/store_categories/manage/'.$row->category_id;
 		?>
 		<a class="btn btn-default" href="<?= $sub_cate_url ?>">
 			<i class="halflings-icon white eye-open"></i> 
 			<?php 
-				echo $num_sub_cates.' Sub '.$entity;
+				echo $num_items.' Sub '.$entity;
 			?> 
 		</a>
 
