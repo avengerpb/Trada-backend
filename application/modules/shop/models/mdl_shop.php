@@ -94,6 +94,13 @@ function get_all_shop_from_user($user_id){
     return $result;
 }
 
+function get_all_item_from_shop($shop_id){
+    // $this->db->where('user_id', $user_id);
+    $query = $this->db->query('SELECT * FROM item_shop JOIN item on item_shop.item_id = item.item_id where shop_id = '.$shop_id);
+    $result = $query->result();
+    return $result;
+}
+
 function get_shop_id($shop_name){
     $this->db->where('shop_name', $shop_name);
     $query = $this->db->get('shop');
