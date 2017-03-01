@@ -26,8 +26,8 @@
 						  <thead>
 							  <tr>
 								  <th>Item ID</th>
-								  <th>Shop ID</th>
 								  <th>Item Name</th>
+								  <th>Category</th>
 								  <th>Price</th>
 								  <th>Item Image Url</th>
 								  <!-- <th>Status</th> -->
@@ -43,8 +43,8 @@
 
 							<tr>
 								<td><?= $row->item_id ?></td>
-								<td class="center"><?= $row->shop_id ?></td>
 								<td class="center"><?= $row->item_name ?></td>
+								<td class="center"><?= $category_name ?></td>
 								<td class="center"><?= $row->price ?></td>
 								<td class="center"><?= $row->item_image_url ?></td>
 								<!-- <td class="center">

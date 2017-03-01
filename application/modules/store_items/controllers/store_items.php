@@ -34,30 +34,29 @@ function manage()
     $data['flash'] = $this->session->flashdata('item');
 
     $post_data = $this->fetch_data_from_post();
-    $item_id = $this->mdl_store_items->get_item_id_by_item_name($post_data['item_name']);
-    $data['query'] = $this->get($item_id);
+    // $item_id = $this->mdl_store_items->get_item_id_by_item_name($post_data['item_name']);
+    $item_id = $post_data['item_id'];
+    $query = $this->get($item_id);
+
+    // $category_id = $this->db->query("SELECT `category_id` FROM `category_item` WHERE `item_id` = $item_id");
+    // $this->load->module('store_categories');
+    // $data['category_name'] = $this->store_categories->_get_category_name($category_id);
+
+
     // $row = $query->result();
     // echo json_encode($row);
 
-    // if (isset($row)) {
-    //     $data['edit_item_image_url'] = base_url().'index.php/store_items/create/'.$row['item_id'];
-    //     $data['item_id'] = $row['item_id'];
-    //     $data['shop_id'] = $row['shop_id'];
-    //     $data['item_name'] = $row['item_name'];
-    //     $data['price'] = $row['price'];
-    //     $data['item_image_url'] = $row['item_image_url'];
-    // }
-
 
     // foreach ($query->result() as $row) {
-    //     $data['edit_item_image_url'] = base_url().'index.php/store_items/create/'.$row->item_id;
-    //     $data['item_id'] = $row->item_id;
-    //     $data['shop_id'] = $row->shop_id;
-    //     $data['item_name'] = $row->item_name;
-    //     $data['price'] = $row->price;
-    //     $data['item_image_url'] = $row->item_image_url;
+    //     echo $data['edit_item_image_url'] = base_url().'index.php/store_items/create/'.$row->item_id;
+    //     echo $data['item_id'] = $row->item_id;
+    //     echo $data['shop_id'] = $row->shop_id;
+    //     echo $data['item_name'] = $row->item_name;
+    //     echo $data['price'] = $row->price;
+    //     echo $data['item_image_url'] = $row->item_image_url;
     // }
 
+    $data['query'] = $query;
     $data['view_file'] = 'manage';    
     $this->templates->admin($data);
 }
@@ -85,15 +84,20 @@ function create()
     $update_id = $this->uri->segment(3);
     $item_image_url = $this->mdl_store_items->get_item_image_url($update_id);
 
+    $this->load->module('store_categories');
+    $post_data = $this->store_categories->fetch_data_from_post();
+    $category_id = $this->store_categories->get_category_id_by_category_name($post_data['category_name']);
+
     if ($submit == 'Submit') {
         // $this->form_validation->set_rules('item_id', 'Item ID', 'required');
         $this->form_validation->set_rules('item_name', 'Item Name', 'required|max_length[240]|callback_item_check');
         $this->form_validation->set_rules('price', 'Price', 'required|numeric');
+        $this->form_validation->set_rules('category_id', 'Group Category', 'required');
 
         if ($this->form_validation->run() == true) {
             //get the variables
             $data = $this->fetch_data_from_post();
-            // $data['item_url'] = url_title($data['item_name']);
+            $cate_id = $this->input->post('category_id');
 
             if (is_numeric($update_id)) {
                 //update the item details
@@ -107,9 +111,8 @@ function create()
                 //insert a new item
                 $this->_insert($data);
                 $update_id = $this->get_max(); //get the ID of the new item
-                $this->load->database('item');
-                $data2 = array('item_id' => $this->db->insert_id(), );
-                $this->_insert2($data2);
+
+                $this->db->query("INSERT INTO `category_item`(`category_id`, `item_id`) VALUES ($cate_id,$update_id)");
 
                 $flash_msg = 'The item was successfully added !';
                 $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
@@ -135,6 +138,10 @@ function create()
         $data['headline'] = 'Update Item Details';
     }
 
+
+    $data['category_id'] = $category_id;
+    $data['options'] = $this->store_categories->_get_dropdown_options($update_id);
+    $data['num_dropdown_options'] = count($data['options']);
     $data['item_image_url'] = $item_image_url;
     $data['update_id'] = $update_id;
     $data['flash'] = $this->session->flashdata('item');

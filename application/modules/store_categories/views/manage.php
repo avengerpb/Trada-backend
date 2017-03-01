@@ -22,7 +22,7 @@
 					</div>
 					<div class="box-content">
 						<?php 
-							echo Modules::run('store_categories/_draw_sortable_list', $group_cate_id);
+							echo Modules::run('store_categories/_draw_sortable_list', $category_id);
 						?>						            
 					</div>
 				</div><!--/span-->

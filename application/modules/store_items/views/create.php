@@ -59,6 +59,25 @@
 						  </div>
 						</div>
 
+						<?php 
+							if (!is_numeric($update_id)) {
+								if ($num_dropdown_options > 1) {
+					  	?>
+					  	<div class="control-group">
+							<label class="control-label" for="typeahead">Group Category </label>
+						  	<div class="controls">
+								<?php 
+									$additional_dd_code = 'id="selectError3"';
+									echo form_dropdown('category_id', $options, $category_id, $additional_dd_code);
+								?>
+						  	</div>
+						</div>	
+						<?php } else {
+								echo form_hidden('category_id', 0);
+							}
+						}
+						?>
+
 								<!-- <div class="control-group">
 								  <label class="control-label" for="typeahead">Item ID </label>
 								  <div class="controls">

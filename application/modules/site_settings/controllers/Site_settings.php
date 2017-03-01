@@ -20,4 +20,11 @@ function _get_items_segments()
     return $segments;
 }
 
+function _get_page_not_found_msg()
+{
+	$msg = '<h1>It is a webpage but not as we know it!</h1>';
+	$msg .= '<p>Please check and try again</p>';
+	return $msg;
+}
+
 }

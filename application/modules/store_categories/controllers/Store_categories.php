@@ -17,7 +17,7 @@ function _get_all_sub_cates_for_dropdown()
     $query = $this->_custom_query($mysql_query);
     foreach ($query->result() as $row) {
         $group_cate_name = $this->_get_category_name($row->group_cate_id);
-        $sub_categories[$row->category_id] = $group_cate_id." > ".$row->category_name;
+        $sub_categories[$row->category_id] = $category_id." > ".$row->category_name;
     }
 
     if (!isset($sub_categories)) {
@@ -28,9 +28,9 @@ function _get_all_sub_cates_for_dropdown()
 }
 */
 
-function _draw_top_nav()
+function _draw_top_nav($update_id)
 {
-    $mysql_query = "SELECT * FROM `category` WHERE `group_cate_id` = 0 ORDER BY `priority`";
+    $mysql_query = "SELECT * FROM `category` WHERE `category_id` >= 0";
     $query = $this->_custom_query($mysql_query);
     foreach ($query->result() as $row) {
         $group_cate[$row->category_id] = $row->category_name;
@@ -43,35 +43,37 @@ function _draw_top_nav()
 function _get_group_cate_name($update_id)
 {
     $data = $this->fetch_data_from_db($update_id);
-    $group_cate_id = $data['group_cate_id'];
-    $group_cate_name = $this->_get_category_name($group_cate_id);
+    $category_id = $data['group_cate_id'];
+    $group_cate_name = $this->_get_category_name($category_id);
     return $group_cate_name;
 }
 
-function sort()
-{
-    $this->load->module('site_security');
-    $this->site_security->_make_sure_is_admin();
+// function sort()
+// {
+//     $this->load->module('site_security');
+//     $this->site_security->_make_sure_is_admin();
 
-    $number = $this->input->post('number', true);
-    for ($i=1; $i <= $number ; $i++) { 
-        $update_id = $_POST['order'.$i];
-        $data['priority'] = $i;
-        $this->_update($update_id, $data);
-    }
-}
+//     $number = $this->input->post('number', true);
+//     for ($i=1; $i <= $number ; $i++) { 
+//         $update_id = $_POST['order'.$i];
+//         $data['priority'] = $i;
+//         $this->_update($update_id, $data);
+//     }
+// }
 
-function _draw_sortable_list($group_cate_id)
+function _draw_sortable_list()
 {
-    $mysql_query = "SELECT * FROM `category` WHERE `group_cate_id` = $group_cate_id ORDER BY `priority`";
+    // $mysql_query = "SELECT * FROM `category` WHERE `group_cate_id` = $category_id ORDER BY `priority`";
+    $mysql_query = "SELECT * FROM `category`";
     $data['query'] = $this->_custom_query($mysql_query);
     $this->load->view('sortable_list', $data);
 }
 
-function _count_sub_cates($update_id)
+function _count_items($update_id)
 {
-    // return the number of sub categories, belonging to THIS category
-    $query = $this->get_where_custom('group_cate_id', $update_id);
+    // return the number of items, belonging to THIS category
+    $this->load->database('category_item');
+    $query = $this->db->query("SELECT `item_id` FROM `category_item` WHERE `category_id` = $update_id");
     $num_rows = $query->num_rows();
     return $num_rows;
 }
@@ -94,34 +96,20 @@ function create()
             if (is_numeric($update_id)) {
                 //update the category details
                 $this->_update($update_id, $data);
-                if ($data['group_cate_id'] == 0) {
-                    $flash_msg = 'The group category were successfully updated !';
-                    $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+                $flash_msg = 'The category details were successfully updated !';
+                $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
 
-                    $this->session->set_flashdata('category', $value);
-                } else {
-                    $flash_msg = 'The category details were successfully updated !';
-                    $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
-
-                    $this->session->set_flashdata('category', $value);
-                }                
+                $this->session->set_flashdata('category', $value);
                 redirect('index.php/store_categories/create/'.$update_id);
             } else {
                 //insert a new category
                 $this->_insert($data);
                 $update_id = $this->get_max(); //get the ID of the new category
 
-                if ($data['group_cate_id'] == 0) {
-                    $flash_msg = 'The new group category were successfully added !';
-                    $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+                $flash_msg = 'The new category were successfully added !';
+                $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
 
-                    $this->session->set_flashdata('category', $value);
-                } else {
-                    $flash_msg = 'The new category were successfully added !';
-                    $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
-
-                    $this->session->set_flashdata('category', $value);
-                }
+                $this->session->set_flashdata('category', $value);
                 redirect('index.php/store_categories/create/'.$update_id);
             }
             
@@ -155,31 +143,31 @@ function manage()
     $this->load->module('site_security');
     $this->site_security->_make_sure_is_admin();
 
-    $group_cate_id = $this->uri->segment(3);
-    if (!is_numeric($group_cate_id)) {
-        $group_cate_id = 0;
-    }
+    $category_id = $this->uri->segment(3);
+    // if (!is_numeric($category_id)) {
+    //     $category_id = 0;
+    // }
 
     $data['flash'] = $this->session->flashdata('category');
 
     $post_data = $this->fetch_data_from_post();
     $data['sort_this'] = true;
-    $data['group_cate_id'] = $group_cate_id;
-    $data['query'] = $this->get_where_custom('group_cate_id', $group_cate_id);
+    $data['category_id'] = $category_id;
+    $data['query'] = $this->get_where_custom('category_id', $category_id);
     $data['view_file'] = 'manage';    
     $this->templates->admin($data);
 }
 
-function _get_dropdown_options($update_id)
+function _get_dropdown_options()
 {
-    if (!is_numeric($update_id)) {
-        $update_id = 0;
-    }
+    // if (!is_numeric($update_id)) {
+    //     $update_id = 0;
+    // }
 
     $options[''] = 'Please Select...';
 
     // Build an array of all categories group
-    $mysql_query = "SELECT * FROM `category` WHERE `group_cate_id` = 0 AND `category_id` != $update_id";
+    $mysql_query = "SELECT * FROM `category`";
     $query = $this->_custom_query($mysql_query);
 
     foreach ($query->result() as $row) {
@@ -195,10 +183,14 @@ function _get_category_name($update_id)
     return $category_name;
 }
 
+function get_category_id_by_category_name($category_name)
+{
+    $this->mdl_store_categories->get_category_id_by_category_name($category_name);
+}
+
 function fetch_data_from_post()
 {
     $data['category_name'] = $this->input->post('category_name', true);
-    $data['group_cate_id'] = $this->input->post('group_cate_id', true);
     $data['category_description'] = $this->input->post('category_description', true);
     return $data;
 }
@@ -213,7 +205,6 @@ function fetch_data_from_db($update_id)
     foreach ($query->result() as $row) {
         $data['category_id'] = $row->category_id;
         $data['category_name'] = $row->category_name;
-        $data['group_cate_id'] = $row->group_cate_id;
         $data['category_description'] = $row->category_description;
     }
 

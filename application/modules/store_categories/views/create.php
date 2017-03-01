@@ -25,23 +25,6 @@
 
 					<form class="form-horizontal" method="post" action="<?= $form_location ?>">
 					  <fieldset>
-					  	<?php 
-					  		if ($num_dropdown_options > 1) {
-					  	?>
-					  	<div class="control-group">
-							<label class="control-label" for="typeahead">Group Category </label>
-						  	<div class="controls">
-								<?php 
-									$additional_dd_code = 'id="selectError3"';
-									echo form_dropdown('group_cate_id', $options, $group_cate_id, $additional_dd_code);
-								?>
-						  	</div>
-						</div>	
-						<?php } else {
-								echo form_hidden('group_cate_id', 0);
-							}
-						?>
-
 						<div class="control-group">
 						  <label class="control-label" for="typeahead">Category Name </label>
 						  <div class="controls">
