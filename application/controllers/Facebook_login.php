@@ -108,7 +108,7 @@ class Facebook_login extends CI_Controller {
 
 
 	public function add_page_shop(){
-		$link = 'https://www.facebook.com/duonggodfanclub/?notif_t=page_user_activity&notif_id=1487652095742563';
+		$link = $_POST['fb_link'];
 		preg_match('/(?:http:\/\/)?(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-]*)/',
 		    $link, $matches);
 
@@ -159,6 +159,7 @@ class Facebook_login extends CI_Controller {
 		
 
   		$data = json_encode($data);
+  		echo $data;
 		
 	}
 }
