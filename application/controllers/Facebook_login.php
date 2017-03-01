@@ -87,13 +87,12 @@ class Facebook_login extends CI_Controller {
 				'location' => $graphNode['location'],
 				'user_image_url' => json_decode($graphNode['picture'])->url
 			);
-
-			$res = $this->model_users->get_profile($graphNode['id']);
-			$user_id = $res->user_id;
-
 			$this->load->model('model_users');
 			$this->model_users->add_fb_user($graphNode['id'], $data_dtb);
 
+			$res = $this->model_users->get_profile($graphNode['id']);
+			$user_id = $res->user_id;
+			
   			$data_session = array (
   				//'birthday' => $graphNode['birthday'],
   				'user_id' => $user_id,
