@@ -141,13 +141,10 @@ function manage()
 //     return $data;
 // }
 
-function fetch_data_from_db($update_id)
+function fetch_data_from_db()
 {
-    if (!is_numeric($update_id)) {
-        redirect('index.php/site_security/not_allowed');
-    }
-
-    $query = $this->get_where($update_id);
+    $shop_id = $_POST['shop_id'];
+    $query = $this->get_where($shop_id);
     foreach ($query->result() as $row) {
         $data['shop_id'] = $row->shop_id;
         $data['shop_name'] = $row->shop_name;
@@ -156,11 +153,7 @@ function fetch_data_from_db($update_id)
         $data['fb_link'] = $row->fb_link;
     }
 
-    if (!isset($data)) {
-        $data = '';
-    }
-
-    return $data;
+    echo json_encode($data);
 }
 
 function get($order_by)

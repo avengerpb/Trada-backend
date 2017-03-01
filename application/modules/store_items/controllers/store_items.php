@@ -20,39 +20,13 @@ function manage()
     /*$data['flash'] = $this->session->flashdata('item');*/
 
     $post_data = $this->fetch_data_from_post();
-<<<<<<< HEAD
+
     $item_id = $this->mdl_store_items->get_item_id_by_item_name($post_data['item_name']);
     $data = $this->get($item_id);
     echo json_encode($data);
     /*$data['view_file'] = 'manage';    
     $this->templates->admin($data);*/
-=======
-    // $item_id = $this->mdl_store_items->get_item_id_by_item_name($post_data['item_name']);
-    $item_id = $post_data['item_id'];
-    $query = $this->get($item_id);
 
-    // $category_id = $this->db->query("SELECT `category_id` FROM `category_item` WHERE `item_id` = $item_id");
-    // $this->load->module('store_categories');
-    // $data['category_name'] = $this->store_categories->_get_category_name($category_id);
-
-
-    // $row = $query->result();
-    // echo json_encode($row);
-
-
-    // foreach ($query->result() as $row) {
-    //     echo $data['edit_item_image_url'] = base_url().'index.php/store_items/create/'.$row->item_id;
-    //     echo $data['item_id'] = $row->item_id;
-    //     echo $data['shop_id'] = $row->shop_id;
-    //     echo $data['item_name'] = $row->item_name;
-    //     echo $data['price'] = $row->price;
-    //     echo $data['item_image_url'] = $row->item_image_url;
-    // }
-
-    $data['query'] = $query;
-    $data['view_file'] = 'manage';    
-    $this->templates->admin($data);
->>>>>>> origin/item
 }
 
 function view($update_id)
