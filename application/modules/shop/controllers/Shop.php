@@ -30,12 +30,12 @@ function create()
         if ($this->_insert($data)){
             $shop_id = $this->mdl_shop->get_shop_id($_POST['shop_name']);
             $this->mdl_shop->shop_user_insert($shop_id);
-            $status = "success";
+            $data['status'] = "success";
         } else{
-            $status = "failes";
+           $data['status'] = "failes";
         }
 
-        echo json_encode($status);
+        echo json_encode($data);
         // $update_id = $this->get_max(); //get the ID of the new shop
 
         // $flash_msg = 'The shop was successfully created !';
