@@ -98,6 +98,7 @@ class Facebook_login extends MX_Controller {
   				'user_id' => $user_id,
   				'email' => $graphNode['email'],
 				'user_name' => $graphNode['id'],
+				'location' => json_decode($graphNode['location'])->name,
 				'full_name' => $graphNode['name'],
 				'is_logged_in' => 1,
 				'user_image_url' => json_decode($graphNode['picture'])->url
