@@ -121,6 +121,6 @@ function shop_user_insert($shop_id){
 function add_fb_picture_url($shop_image_url, $shop_name){
     $data['shop_image_url'] = $shop_image_url;
     $this->db->where('shop_name', $shop_name);
-    $this->db->insert('shop', $data);
+    $this->db->update('shop', $data);
 }
 }

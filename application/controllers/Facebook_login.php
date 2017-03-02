@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 require_once __DIR__ . '/php-graph-sdk-5.4/src/Facebook/autoload.php';
 
-class Facebook_login extends CI_Controller {
+class Facebook_login extends MX_Controller {
 
 	public function __construct() {
 		
@@ -84,7 +84,7 @@ class Facebook_login extends CI_Controller {
   				'email' => $graphNode['email'],
   				'fb_link' => $graphNode['link'],
 				'full_name' => $graphNode['name'],
-				'location' => $graphNode['location'],
+				'location' => json_decode($graphNode['location'])->name,
 				'user_image_url' => json_decode($graphNode['picture'])->url
 			);
 			$this->load->model('model_users');
@@ -119,7 +119,7 @@ class Facebook_login extends CI_Controller {
 
 		$str = strstr($matches[0], '/');
 		$str = str_replace("/", "", $str);
-		// print_r($str);
+		print_r($str);
 
 	  	$session = $_SESSION['facebook_access_token'];
 
