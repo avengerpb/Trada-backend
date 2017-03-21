@@ -272,7 +272,7 @@ function get_all_shop_from_user($user_id){
 }
 
 function get_all_item_from_shop(){
-    $shop_id = $_POST['$shop_id'];
+    $shop_id = $_POST['shop_id'];
     echo json_encode($this->mdl_shop->get_all_item_from_shop($shop_id));
 }
 
