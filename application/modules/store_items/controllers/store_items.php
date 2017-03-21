@@ -379,6 +379,7 @@ function item_check($str)
         return false;
     } else {
         return true;
+        
     }
 }
 
